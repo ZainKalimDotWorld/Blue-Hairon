@@ -8,4 +8,4 @@
     android:ellipsize="marquee"
     android:textSize="18sp"
     android:textColor="#808080"
-    android:text="Select a Branch" />
+    android:text="Select Branch" />

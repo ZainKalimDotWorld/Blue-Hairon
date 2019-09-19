@@ -89,7 +89,7 @@ int v11;
         customer_info = (EditText) findViewById(R.id.customer_info);
 
         spLeaveSubject2.setOnItemSelectedListener(MainActivity.this);
-        spLeaveSubject2.setPrompt("Select your favorite Planet!");
+//        spLeaveSubject2.setPrompt("Select your favorite Planet!");
 
 //        spLeaveSubject2.setAdapter(
 //                new NothingSelectedSpinnerAdapter(adapter,
@@ -123,7 +123,7 @@ int v11;
         {
             SweetAlertDialog pDialog = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.ERROR_TYPE);
             pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
-            pDialog.setTitleText("Please Fill Form Propoerly");
+            pDialog.setTitleText("Please Fill Form Properly");
             pDialog.setCancelable(true);
             pDialog.show();
 

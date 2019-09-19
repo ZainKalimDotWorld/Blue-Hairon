@@ -1,19 +1,39 @@
 package com.example.myapplication;
 
+import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
+import dmax.dialog.SpotsDialog;
 
 
 public class ViewPagerAdapter extends PagerAdapter {
@@ -21,13 +41,119 @@ public class ViewPagerAdapter extends PagerAdapter {
     private Context context;
     private LayoutInflater layoutInflater;
     private ArrayList<Product_Image> items;
+    private ArrayList<Product_Image> items2;
+    SpotsDialog progressDialog;
 
-//    private Integer [] images = {R.drawable.item1,R.drawable.item2,R.drawable.item1};
+    int items_id;
+
+
 
     public ViewPagerAdapter(Context context , ArrayList<Product_Image> items) {
         this.context = context;
         this.items = items;
+
+
     }
+
+
+    public ViewPagerAdapter(Context context , ArrayList<Product_Image> items , int items_id) {
+        this.context = context;
+        this.items = items;
+        this.items_id = items_id;
+
+        Log.d("items11" , ""+items_id);
+        getapi();
+    }
+
+    private void getapi()
+    {
+
+//        pDialog = Utilss.showSweetLoader(context, SweetAlertDialog.PROGRESS_TYPE, "Fetching Data...");
+        progressDialog = new SpotsDialog(context, R.style.Custom);
+        progressDialog.show();
+
+        items2 = new ArrayList<>();
+        items.clear();
+        com.android.volley.RequestQueue queue = Volley.newRequestQueue(context);
+        String url = "http://api.surveymenu.dwtdemo.com/api/products/{id}?id=" +items_id;
+
+        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, url, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response)
+            {
+
+                Log.d("ResponseMMM" , response);
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONArray jsonArray = jsonObject.getJSONArray("ProductImages");
+
+                    for (int i = 0; i < jsonArray.length(); i++)
+                    {
+                        items.clear();
+                        JSONObject jsonObject2 = new JSONObject(String.valueOf(jsonArray.get(i)));
+                        Product_Image dataObject = new Product_Image();
+
+                        dataObject.setImage_Name(jsonObject2.getString("ImageName"));
+                        dataObject.setImagePath(jsonObject2.getString("ImagePath"));
+                        dataObject.setThumbnail(jsonObject2.getString("Thumbnail"));
+                        items2.add(dataObject);
+                    }
+                    ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(context,items2);
+                    Product_Detail.viewPager.setAdapter(viewPagerAdapter);
+
+                    ((Activity)context).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run()
+                        {
+                            //change View Data
+                            progressDialog.dismiss();
+                        }
+                    });
+
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        },  new com.android.volley.Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(final VolleyError error) {
+
+            ((Activity)context).runOnUiThread(new Runnable() {
+                @Override
+                public void run()
+                {
+                    //change View Data
+                    progressDialog.dismiss();
+                }
+            });
+
+
+
+            Log.d("Error_Response", error.toString());
+        }
+    }) {
+        @Override
+        public Map getHeaders() {
+            HashMap headers = new HashMap();
+            headers.put("Authorization", MainActivity.value2);
+            return headers;
+        }
+    };
+        queue.add(stringRequest);
+
+    }
+
+
+
+
+
+
+
+
 
     @Override
     public int getCount() {
@@ -42,11 +168,13 @@ public class ViewPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {
 
+//        LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver, new IntentFilter("custom-message2"));
         final Product_Image item = items.get(position);
 
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         View view = layoutInflater.inflate(R.layout.custom_layout, null);
+
 
         ImageView imageView = (ImageView) view.findViewById(R.id.imageView);
         Picasso.with(context).load(item.getImagePath()).into(imageView);
@@ -57,6 +185,7 @@ public class ViewPagerAdapter extends PagerAdapter {
 
     }
 
+
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
 
@@ -65,4 +194,28 @@ public class ViewPagerAdapter extends PagerAdapter {
         vp.removeView(view);
 
     }
+
+
+//    public BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//
+////           int ItemName = intent.getIntExtra("ValueId2", 0);
+////           Log.d("ItemName123", "" + ItemName);
+//
+//
+//            if(ACTION_INTENT2.equals(intent.getAction()))
+//            {
+//                           int ItemName = intent.getIntExtra("ValueId2", 0);
+//                           Log.d("ItemName123", "" + ItemName);
+//
+//                //DO
+//            }
+//
+//
+//        }
+//    };
+
+
+
 }

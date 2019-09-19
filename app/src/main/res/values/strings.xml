@@ -2,4 +2,5 @@
     <string name="app_name">My Application</string>
     <string name="title_activity_value__feedback">Value_Feedback</string>
     <string name="title_activity_product__detail">Product_Detail</string>
+    <string name="design_develop">design &amp; developed by DOT WORLD (https://dotworldtechnologies.com)</string>
 </resources>

@@ -1,7 +1,9 @@
 package com.example.myapplication;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +28,9 @@ public class SnapRecyclerAdapter_Details extends RecyclerView.Adapter<SnapRecycl
     private LayoutInflater layoutInflater;
     private Context context;
     private ArrayList<Item> items;
+    String ACTION_INTENT;
+    String ACTION_INTENT2="custom-message2";
+
 
     public SnapRecyclerAdapter_Details(Context context, ArrayList<Item> items) {
         this.layoutInflater = LayoutInflater.from(context);
@@ -47,15 +52,27 @@ public class SnapRecyclerAdapter_Details extends RecyclerView.Adapter<SnapRecycl
         Picasso.with(context).load(item.getImage()).into(holder.image);
         holder.appName.setText(item.getProduct());
 
+
+
         holder.clicked_card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-
-
                 Intent intent = new Intent("custom-message");
                 intent.putExtra("ValueId",items.get(position).getID());
+
+//                IntentFilter filter = new IntentFilter("custom-message2");
+//                filter.addAction(ACTION_INTENT2);
+//
+//                LocalBroadcastManager.getInstance(context).registerReceiver(ActivityDataReceiver, filter);
                 LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+
+
+
+//                IntentFilter filter = new IntentFilter("custom-message");
+//                filter.addAction(ACTION_INTENT);
+
+
 
             }
         });
@@ -89,4 +106,18 @@ public class SnapRecyclerAdapter_Details extends RecyclerView.Adapter<SnapRecycl
 
         }
     }
+
+
+    protected BroadcastReceiver ActivityDataReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+//            if(ACTION_INTENT.equals(intent.getAction()))
+//            {
+//                String text = intent.getStringExtra("TEXT");
+//            }
+        }
+    };
+
+
+
 }
