@@ -37,6 +37,7 @@ public class ProductsActivity extends BaseActivity {
     private ArrayList<Item> items2;
     private RecyclerView recyclerView;
     SnapRecyclerAdapter adapter;
+    SnapRecyclerAdapter2 adapter2;
     SweetAlertDialog pDialog;
 //    SwipeRefreshLayout mSwipeRefreshLayout;
     int products_intent;
@@ -67,7 +68,8 @@ public class ProductsActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
 
-                onBackPressed();
+                Intent intent=new Intent(ProductsActivity.this  ,Main_MenuScreen.class );
+                startActivity(intent);
             }
         });
 
@@ -78,9 +80,9 @@ public class ProductsActivity extends BaseActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setHasFixedSize(true);
 
-        adapter = new SnapRecyclerAdapter(this, items);
-        adapter.setDataList(items);
-        recyclerView.setAdapter(adapter);
+
+
+
 
 //        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 //            @Override
@@ -111,8 +113,22 @@ public class ProductsActivity extends BaseActivity {
 
     }
 
+
+
+    public void onBackPressed() {
+//        Intent intent = new Intent(Product_Detail.this, ProductsActivity.class);
+//        finish();
+//        startActivity(intent);
+    }
+
+
     private void showdatainarabic()
     {
+
+        adapter2 = new SnapRecyclerAdapter2(this, items2);
+        adapter2.setDataList(items2);
+        recyclerView.setAdapter(adapter2);
+
 
         textView1.setText("شهي يقفز في الفم. نحن نخدم العاطفة");
         pDialog = Utilss.showSweetLoader(ProductsActivity.this, SweetAlertDialog.PROGRESS_TYPE, "Fetching Data...");
@@ -124,18 +140,12 @@ public class ProductsActivity extends BaseActivity {
                     @Override
                     public void onResponse(String response) {
 
-
-
-
-
-
-
                         Log.d("Json-response1", response);
 
                         try {
                             JSONArray jsonArray =new JSONArray(response);
 
-                            items.clear();
+                            items2.clear();
 
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = new JSONObject(String.valueOf(jsonArray.get(i)));
@@ -149,8 +159,8 @@ public class ProductsActivity extends BaseActivity {
                                 dataObject.setPrice(jsonObject.getLong("Price"));
 
 
-                                items.add(dataObject);
-                                adapter.notifyDataSetChanged();
+                                items2.add(dataObject);
+                                adapter2.notifyDataSetChanged();
 
                                 runOnUiThread(new Runnable() {
                                     @Override
@@ -287,6 +297,10 @@ public class ProductsActivity extends BaseActivity {
 
     private void loadallimages()
     {
+
+        adapter = new SnapRecyclerAdapter(this, items);
+        adapter.setDataList(items);
+        recyclerView.setAdapter(adapter);
 
         textView1.setText("Deliciousness jumping into the mouth. We serve passion");
         pDialog = Utilss.showSweetLoader(ProductsActivity.this, SweetAlertDialog.PROGRESS_TYPE, "Fetching Data...");

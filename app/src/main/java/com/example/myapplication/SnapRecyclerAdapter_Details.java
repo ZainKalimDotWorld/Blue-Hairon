@@ -60,20 +60,7 @@ public class SnapRecyclerAdapter_Details extends RecyclerView.Adapter<SnapRecycl
 
                 Intent intent = new Intent("custom-message");
                 intent.putExtra("ValueId",items.get(position).getID());
-
-//                IntentFilter filter = new IntentFilter("custom-message2");
-//                filter.addAction(ACTION_INTENT2);
-//
-//                LocalBroadcastManager.getInstance(context).registerReceiver(ActivityDataReceiver, filter);
                 LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-
-
-
-//                IntentFilter filter = new IntentFilter("custom-message");
-//                filter.addAction(ACTION_INTENT);
-
-
-
             }
         });
     }

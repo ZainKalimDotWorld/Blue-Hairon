@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -42,7 +43,7 @@ public class ViewPagerAdapter extends PagerAdapter {
     private LayoutInflater layoutInflater;
     private ArrayList<Product_Image> items;
     private ArrayList<Product_Image> items2;
-    SpotsDialog progressDialog;
+    SweetAlertDialog pdialog;
 
     int items_id;
 
@@ -67,83 +68,89 @@ public class ViewPagerAdapter extends PagerAdapter {
 
     private void getapi()
     {
+        if (!((Activity) context).isFinishing()) {
+            try {
+                pdialog = Utilss.showSweetLoader(context, SweetAlertDialog.PROGRESS_TYPE, "Submitting...");
 
-//        pDialog = Utilss.showSweetLoader(context, SweetAlertDialog.PROGRESS_TYPE, "Fetching Data...");
-        progressDialog = new SpotsDialog(context, R.style.Custom);
-        progressDialog.show();
+                items2 = new ArrayList<>();
+                items.clear();
+                com.android.volley.RequestQueue queue = Volley.newRequestQueue(context);
+                String url = "http://api.surveymenu.dwtdemo.com/api/products/{id}?id=" +items_id;
 
-        items2 = new ArrayList<>();
-        items.clear();
-        com.android.volley.RequestQueue queue = Volley.newRequestQueue(context);
-        String url = "http://api.surveymenu.dwtdemo.com/api/products/{id}?id=" +items_id;
-
-        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, url, new com.android.volley.Response.Listener<String>() {
-            @Override
-            public void onResponse(String response)
-            {
-
-                Log.d("ResponseMMM" , response);
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    JSONArray jsonArray = jsonObject.getJSONArray("ProductImages");
-
-                    for (int i = 0; i < jsonArray.length(); i++)
+                StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, url, new com.android.volley.Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response)
                     {
-                        items.clear();
-                        JSONObject jsonObject2 = new JSONObject(String.valueOf(jsonArray.get(i)));
-                        Product_Image dataObject = new Product_Image();
 
-                        dataObject.setImage_Name(jsonObject2.getString("ImageName"));
-                        dataObject.setImagePath(jsonObject2.getString("ImagePath"));
-                        dataObject.setThumbnail(jsonObject2.getString("Thumbnail"));
-                        items2.add(dataObject);
-                    }
-                    ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(context,items2);
-                    Product_Detail.viewPager.setAdapter(viewPagerAdapter);
+                        Log.d("ResponseMMM" , response);
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            JSONArray jsonArray = jsonObject.getJSONArray("ProductImages");
 
-                    ((Activity)context).runOnUiThread(new Runnable() {
-                        @Override
-                        public void run()
-                        {
-                            //change View Data
-                            progressDialog.dismiss();
+                            for (int i = 0; i < jsonArray.length(); i++)
+                            {
+                                items.clear();
+                                JSONObject jsonObject2 = new JSONObject(String.valueOf(jsonArray.get(i)));
+                                Product_Image dataObject = new Product_Image();
+
+                                dataObject.setImage_Name(jsonObject2.getString("ImageName"));
+                                dataObject.setImagePath(jsonObject2.getString("ImagePath"));
+                                dataObject.setThumbnail(jsonObject2.getString("Thumbnail"));
+                                items2.add(dataObject);
+                            }
+                            ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(context,items2);
+                            Product_Detail.viewPager.setAdapter(viewPagerAdapter);
+
+                            ((Activity)context).runOnUiThread(new Runnable() {
+                                @Override
+                                public void run()
+                                {
+                                    //change View Data
+                                    Utilss.hideSweetLoader(pdialog);
+                                }
+                            });
+
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                    });
+
+
+                    }
+                },  new com.android.volley.Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(final VolleyError error) {
+
+                        ((Activity)context).runOnUiThread(new Runnable() {
+                            @Override
+                            public void run()
+                            {
+                                //change View Data
+                                Utilss.hideSweetLoader(pdialog);
+                            }
+                        });
 
 
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                        Log.d("Error_Response", error.toString());
+                    }
+                }) {
+                    @Override
+                    public Map getHeaders() {
+                        HashMap headers = new HashMap();
+                        headers.put("Authorization", MainActivity.value2);
+                        return headers;
+                    }
+                };
+                queue.add(stringRequest);
 
-
+            } catch (WindowManager.BadTokenException e) {
+                Log.e("WindowManagerBad ", e.toString());
             }
-        },  new com.android.volley.Response.ErrorListener() {
-        @Override
-        public void onErrorResponse(final VolleyError error) {
-
-            ((Activity)context).runOnUiThread(new Runnable() {
-                @Override
-                public void run()
-                {
-                    //change View Data
-                    progressDialog.dismiss();
-                }
-            });
-
-
-
-            Log.d("Error_Response", error.toString());
         }
-    }) {
-        @Override
-        public Map getHeaders() {
-            HashMap headers = new HashMap();
-            headers.put("Authorization", MainActivity.value2);
-            return headers;
-        }
-    };
-        queue.add(stringRequest);
+
+
 
     }
 

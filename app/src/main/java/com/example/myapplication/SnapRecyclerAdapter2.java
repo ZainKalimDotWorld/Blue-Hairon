@@ -12,20 +12,17 @@ import android.widget.TextView;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-import cn.pedant.SweetAlert.SweetAlertDialog;
-
-public class SnapRecyclerAdapter extends RecyclerView.Adapter<SnapRecyclerAdapter.ReyclerViewHolder> {
+public class SnapRecyclerAdapter2 extends RecyclerView.Adapter<SnapRecyclerAdapter2.ReyclerViewHolder> {
 
     private LayoutInflater layoutInflater;
     private Context context;
     private ArrayList<Item> items;
 
-    public SnapRecyclerAdapter(Context context, ArrayList<Item> items) {
+    public SnapRecyclerAdapter2(Context context, ArrayList<Item> items) {
         this.layoutInflater = LayoutInflater.from(context);
         this.context = context;
         this.items = items;
@@ -52,7 +49,9 @@ public class SnapRecyclerAdapter extends RecyclerView.Adapter<SnapRecyclerAdapte
 //        float d=Float.parseFloat(value);
 //        Log.d("Item_Price22", ""+d);
 
-        holder.app_name2.setText(String.format("AED : %.2f", item.getPrice()));
+
+//        "AED : %.2f", item.getPrice()
+        holder.app_name2.setText(String.format("درهم : %.2f", item.getPrice()));
 
 
         holder.category_clicked.setOnClickListener(new View.OnClickListener() {

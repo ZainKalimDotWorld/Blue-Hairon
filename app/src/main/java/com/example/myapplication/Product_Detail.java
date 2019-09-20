@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -21,6 +22,7 @@ import com.viewpagerindicator.CirclePageIndicator;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,8 +35,10 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,7 +66,7 @@ public class Product_Detail extends BaseActivity {
     private boolean clicked = false;
 
     private LabeledSwitch swToggle;
-
+    int index = 0;
     int ItemName;
     LinearLayout indicator;
     private RecyclerView recyclerView;
@@ -73,7 +77,7 @@ public class Product_Detail extends BaseActivity {
     SwipeRefreshLayout mSwipeRefreshLayout;
    ImageView imageView2;
     TextView textView_1, textView_2, textView_34,textView_3;
-    String text1, text2,text3, Category_Nam;
+    String text1, text2,text3, Category_Nam,text4,text5;
     int Category_Id;
     public static ViewPager viewPager;
     ViewPager viewPager2;
@@ -81,7 +85,8 @@ public class Product_Detail extends BaseActivity {
     int product_id;
     JSONObject jsonObject ;
     private int dotscount;
-    private ImageView[] dots;
+    private ImageView imageView4,imageView5;
+    CardView cardView_2;
 
     String ACTION_INTENT="custom-message";
 
@@ -107,6 +112,13 @@ public class Product_Detail extends BaseActivity {
         textView_3 = findViewById(R.id.textView_3);
 
         imageView2 = findViewById(R.id.imageView2);
+        cardView_2 = findViewById(R.id.cardView_2);
+
+        imageView4 = findViewById(R.id.imageView4);
+        imageView5 = findViewById(R.id.imageView5);
+
+
+
 //        imageView3 = findViewById(R.id.imageView3);
 
 //        imageView3.setOnClickListener(new View.OnClickListener() {
@@ -162,10 +174,16 @@ public class Product_Detail extends BaseActivity {
             @Override
             public void onClick(View v) {
 
-                finish();
+
+//               onBackPressed();
+
+               Intent intent=new Intent(Product_Detail.this , ProductsActivity.class);
+               startActivity(intent);
+
 //                onBackPressed();
             }
         });
+
 
 //        image = findViewById(R.id.image);
 
@@ -194,6 +212,24 @@ public class Product_Detail extends BaseActivity {
         recyclerView.setAdapter(adapter);
 
 
+        imageView4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                viewPager.setCurrentItem(viewPager.getCurrentItem()-1 , true);
+            }
+        });
+
+
+        imageView5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                viewPager.setCurrentItem(viewPager.getCurrentItem()+1 , true);
+            }
+        });
+
+
         loadotherdata();
 
     }
@@ -205,10 +241,20 @@ public class Product_Detail extends BaseActivity {
 
 
 
+    public void onBackPressed() {
+//        Intent intent = new Intent(Product_Detail.this, ProductsActivity.class);
+//        finish();
+//        startActivity(intent);
+    }
 
 
     private void showdatainarabic()
     {
+
+        ViewGroup.MarginLayoutParams marginParams = (ViewGroup.MarginLayoutParams) cardView_2.getLayoutParams();
+        marginParams.setMargins(960, marginParams.topMargin, marginParams.rightMargin, marginParams.bottomMargin);
+
+
         pDialog = Utilss.showSweetLoader(Product_Detail.this, SweetAlertDialog.PROGRESS_TYPE, "Fetching Data...");
         com.android.volley.RequestQueue queue = Volley.newRequestQueue(Product_Detail.this);
         String url = "http://api.surveymenu.dwtdemo.com/api/products/{id}?id=" + Category_Id;
@@ -222,6 +268,10 @@ public class Product_Detail extends BaseActivity {
                     JSONObject jsonObject = new JSONObject(response);
                     product_id = jsonObject.getInt("ProductCategoryID");
                     text3 = jsonObject.getString("ProductDescAr");
+
+                    text4 = jsonObject.getString("CategoryName");
+                    text5 = jsonObject.getString("CategoryNameAr");
+
                     text1 = jsonObject.getString("ProductNameAr");
 
                     text2 = jsonObject.getString("Price");
@@ -229,7 +279,16 @@ public class Product_Detail extends BaseActivity {
                     textView_1.setText(text1);
                     textView_2.setText(" درهم : " + text2);
                     textView_3.setText(text3);
-                    textView_34.setText(Category_Nam);
+
+                    if (swToggle.isOn())
+                    {
+                        textView_34.setText(text5);
+                    }
+                    else
+                    {
+                        textView_34.setText(text4);
+                    }
+
 
                     Log.d("ValueIsCategory" , Category_Nam);
                     if (product_id == 0) {
@@ -368,83 +427,170 @@ public class Product_Detail extends BaseActivity {
             ItemName = intent.getIntExtra("ValueId", 0);
             Log.d("ItemName", "" + ItemName);
 
-            ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(Product_Detail.this,items2 , ItemName);
+            ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(Product_Detail.this, items2, ItemName);
             viewPager.setAdapter(viewPagerAdapter);
 
             if (ItemName == 0) {
                 Toast.makeText(context, "Error in retreive", Toast.LENGTH_SHORT).show();
-            }
+            } else {
 
-            else
-            {
-
-                com.android.volley.RequestQueue queue = Volley.newRequestQueue(Product_Detail.this);
-                String url = "http://api.surveymenu.dwtdemo.com/api/products/{id}?id=" +ItemName;
-
-                StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, url, new com.android.volley.Response.Listener<String>() {
-
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-
-                            jsonObject = new JSONObject(response);
-                            product_id = jsonObject.getInt("ProductCategoryID");
-                            text3 = jsonObject.getString("ProductDesc");
-                            text1 = jsonObject.getString("ProductName");
-
-                            text2 = jsonObject.getString("Price");
-
-                        textView_1.setText(text1);
-                            textView_2.setText(" AED : " + text2);
-                            textView_3.setText(text3);
-                            textView_34.setText(Category_Nam);
-
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    hideSweetLoader(pDialog);
-                                }
-                            });
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                if (swToggle.isOn())
+                {
 
 
-                    }
-            },
+                    com.android.volley.RequestQueue queue = Volley.newRequestQueue(Product_Detail.this);
+                    String url = "http://api.surveymenu.dwtdemo.com/api/products/{id}?id=" +ItemName;
 
-                        new com.android.volley.Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(final VolleyError error) {
+                    StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, url, new com.android.volley.Response.Listener<String>() {
 
-                    runOnUiThread(new Runnable() {
                         @Override
-                        public void run() {
-                           Utilss.hideSweetLoader(pDialog);
-                            Log.d("Error_Response", error.toString());
+                        public void onResponse(String response) {
+                            try {
+
+                                jsonObject = new JSONObject(response);
+                                product_id = jsonObject.getInt("ProductCategoryID");
+                                text3 = jsonObject.getString("ProductDescAr");
+                                text1 = jsonObject.getString("ProductNameAr");
+
+
+                                text4 = jsonObject.getString("CategoryName");
+                                text5 = jsonObject.getString("CategoryNameAr");
+
+                                text2 = jsonObject.getString("Price");
+
+                                textView_1.setText(text1);
+                                textView_2.setText(" درهم : " + text2);
+                                textView_3.setText(text3);
+                                textView_34.setText(text5);
+
+//                            textView_34.setText(Category_Nam);
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        hideSweetLoader(pDialog);
+                                    }
+                                });
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
 
                         }
-                    });
-                }
-            }) {
-                @Override
-                public Map getHeaders() {
-                    HashMap headers = new HashMap();
-                    headers.put("Authorization", MainActivity.value2);
-                    return headers;
-                }
-            };
-            queue.add(stringRequest);
+                    },
 
-        }
+                            new com.android.volley.Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(final VolleyError error) {
 
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Utilss.hideSweetLoader(pDialog);
+                                            Log.d("Error_Response", error.toString());
+
+                                        }
+                                    });
+                                }
+                            }) {
+                        @Override
+                        public Map getHeaders() {
+                            HashMap headers = new HashMap();
+                            headers.put("Authorization", MainActivity.value2);
+                            return headers;
+                        }
+                    };
+                    queue.add(stringRequest);
+
+                }
+else
+                {
+
+                    com.android.volley.RequestQueue queue = Volley.newRequestQueue(Product_Detail.this);
+                    String url = "http://api.surveymenu.dwtdemo.com/api/products/{id}?id=" +ItemName;
+
+                    StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, url, new com.android.volley.Response.Listener<String>() {
+
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+
+                                jsonObject = new JSONObject(response);
+                                product_id = jsonObject.getInt("ProductCategoryID");
+                                text3 = jsonObject.getString("ProductDesc");
+                                text1 = jsonObject.getString("ProductName");
+
+
+                                text4 = jsonObject.getString("CategoryName");
+                                text5 = jsonObject.getString("CategoryNameAr");
+
+                                text2 = jsonObject.getString("Price");
+
+                                textView_1.setText(text1);
+                                textView_2.setText(" AED : " + text2);
+                                textView_3.setText(text3);
+
+                                textView_34.setText(text4);
+
+//                            textView_34.setText(Category_Nam);
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        hideSweetLoader(pDialog);
+                                    }
+                                });
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+
+                        }
+                    },
+
+                            new com.android.volley.Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(final VolleyError error) {
+
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Utilss.hideSweetLoader(pDialog);
+                                            Log.d("Error_Response", error.toString());
+
+                                        }
+                                    });
+                                }
+                            }) {
+                        @Override
+                        public Map getHeaders() {
+                            HashMap headers = new HashMap();
+                            headers.put("Authorization", MainActivity.value2);
+                            return headers;
+                        }
+                    };
+                    queue.add(stringRequest);
+
+                }
+
+
+
+            }
         }
     };
 
 
 
     private void loadotherdata() {
+
+
+        ViewGroup.MarginLayoutParams marginParams = (ViewGroup.MarginLayoutParams) cardView_2.getLayoutParams();
+        marginParams.setMargins(60,
+                marginParams.topMargin, 0, //notice only changing right margin
+                marginParams.bottomMargin);
+
 
 //        pDialog = Utilss.showSweetLoader(Product_Detail.this, SweetAlertDialog.PROGRESS_TYPE, "Fetching Data...");
         com.android.volley.RequestQueue queue = Volley.newRequestQueue(Product_Detail.this);

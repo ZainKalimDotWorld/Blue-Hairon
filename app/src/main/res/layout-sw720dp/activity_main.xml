@@ -89,6 +89,7 @@
             android:layout_marginLeft="30.0dip"
             android:maxLength="12"
             android:maxLines="1"
+            android:textSize="18sp"
             android:hint="Enter Pin Code"
             android:inputType="textPassword"
             android:layout_marginRight="30.0dip"

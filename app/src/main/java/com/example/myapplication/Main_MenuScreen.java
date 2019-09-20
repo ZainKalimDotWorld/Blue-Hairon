@@ -48,6 +48,9 @@ public class Main_MenuScreen extends BaseActivity {
 String token;
 TextView  textview;
     ArrayList<MainCategories_Pojo> mFlowerList2;
+
+    ArrayList<MainCategories_Pojo> mFlowerList3;
+
     //    FlowerData mFlowerData;
     Main_Manu_Adapter dataListAdapter;
     private LabeledSwitch swToggle;
@@ -68,6 +71,8 @@ TextView  textview;
 
         mFlowerList = new ArrayList<>();
         mFlowerList2 = new ArrayList<>();
+        mFlowerList3 = new ArrayList<>();
+
 
 
         swToggle = findViewById(R.id.iv_toggle);
@@ -108,13 +113,115 @@ TextView  textview;
                 {
                     showdatainarabic();
                 } else {
-                    retreiveCategories();
+                    retreiveCategoriesinenglish();
                 }
             }
 
         });
 
         retreiveCategories();
+    }
+
+
+
+    public void onBackPressed() {
+//        Intent intent = new Intent(Product_Detail.this, ProductsActivity.class);
+//        finish();
+//        startActivity(intent);
+    }
+
+
+    private void retreiveCategoriesinenglish()
+    {
+        mFlowerList3 =new ArrayList<>();
+        textview.setText("What are you eating today? Select Category!");
+        pDialog = Utilss.showSweetLoader(Main_MenuScreen.this, SweetAlertDialog.PROGRESS_TYPE, "Fetching Data...");
+
+        com.android.volley.RequestQueue queue = Volley.newRequestQueue(Main_MenuScreen.this);
+        String url = "http://api.surveymenu.dwtdemo.com/api/en/category";
+        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, url,
+                new com.android.volley.Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+
+
+
+
+
+                        Log.d("Json-response1", response);
+
+                        try {
+
+                            JSONArray jsonArray =new JSONArray(response);
+                            mFlowerList3.clear();
+
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject = new JSONObject(String.valueOf(jsonArray.get(i)));
+                                MainCategories_Pojo dataObject = new MainCategories_Pojo();
+
+                                dataObject.setID(jsonObject.getInt("ID"));
+                                dataObject.setCategory(jsonObject.getString("Category"));
+                                dataObject.setImage(jsonObject.getString("Image"));
+                                dataObject.setSubCategory(jsonObject.getInt("SubCategory"));
+                                mFlowerList3.add(dataObject);
+                                dataListAdapter.notifyDataSetChanged();
+
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+
+                                        Utilss.hideSweetLoader(pDialog);
+                                    }
+
+                                });
+
+
+                            }
+
+                            dataListAdapter = new Main_Manu_Adapter(Main_MenuScreen.this, mFlowerList3);
+                            GridLayoutManager mGridLayoutManager = new GridLayoutManager(Main_MenuScreen.this, 4);
+                            int spanCount = 4; // 3 columns
+                            int spacing = 0; // 50px
+                            boolean includeEdge = false;
+                            mRecyclerView.addItemDecoration(new ItemOffsetDecoration(spanCount, spacing, includeEdge));
+                            mRecyclerView.setLayoutManager(mGridLayoutManager);
+                            mRecyclerView.setAdapter(dataListAdapter);
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+
+                }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(final VolleyError error) {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        Log.d("Error_Fetch", error.toString());
+                        Utilss.hideSweetLoader(pDialog);
+                    }
+
+                });
+
+            }
+        }) {
+            @Override
+            public Map getHeaders() {
+                HashMap headers = new HashMap();
+                headers.put("Authorization", "Bearer "+MainActivity.value2);
+                return headers;
+            }
+        };
+
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(10000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        queue.add(stringRequest);
     }
 
     private void showdatainarabic()
