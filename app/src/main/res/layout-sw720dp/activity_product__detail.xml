@@ -107,21 +107,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="275dp"
                 android:layout_marginLeft="410dp"
-                android:src="@mipmap/left" />
+                android:src="@mipmap/left_arrow" />
 
             <ImageView
                 android:id="@+id/imageView5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="-10dp"
                 android:layout_marginTop="275dp"
                 android:layout_toRightOf="@id/imageView4"
-                android:src="@mipmap/right" />
-
-
-
-
-
+                android:src="@mipmap/right_arrow" />
 
         </RelativeLayout>
 

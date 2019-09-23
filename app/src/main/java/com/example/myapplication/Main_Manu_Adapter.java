@@ -62,6 +62,11 @@ public class Main_Manu_Adapter extends RecyclerView.Adapter<FlowerViewHolder> {
             public void onClick(View v) {
 
                 Intent intent =new Intent(mContext , ProductsActivity.class);
+
+                boolean l =Main_MenuScreen.swToggle.isOn();
+                Log.d("ValueOfBool" , ""+l);
+
+                intent.putExtra("Toggle_Value" , l);
                 intent.putExtra("Products_Id" , mFlowerList.get(position).getID());
                 mContext.startActivity(intent);
             }

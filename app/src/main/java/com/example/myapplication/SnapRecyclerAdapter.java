@@ -60,6 +60,13 @@ public class SnapRecyclerAdapter extends RecyclerView.Adapter<SnapRecyclerAdapte
             public void onClick(View v) {
 
                 Intent intent =new Intent(context , Product_Detail.class);
+
+
+                boolean l2 =ProductsActivity.swToggle.isOn();
+                Log.d("ValueOfBool2" , ""+l2);
+                intent.putExtra("ValueBool2" ,l2);
+
+
                 intent.putExtra("Category_Id" , item.getID());
                 intent.putExtra("Category_name" , item.getCategory());
                 context.startActivity(intent);

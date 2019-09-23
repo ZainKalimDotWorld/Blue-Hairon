@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
@@ -17,6 +19,8 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.droidnet.DroidListener;
+import com.droidnet.DroidNet;
 import com.github.angads25.toggle.LabeledSwitch;
 import com.github.angads25.toggle.interfaces.OnToggledListener;
 
@@ -25,12 +29,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.EventListener;
 import java.util.HashMap;
 import java.util.Map;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-public class ProductsActivity extends BaseActivity {
+public class ProductsActivity extends BaseActivity implements DroidListener {
 
     ImageView imageView2;
     private ArrayList<Item> items;
@@ -38,16 +43,23 @@ public class ProductsActivity extends BaseActivity {
     private RecyclerView recyclerView;
     SnapRecyclerAdapter adapter;
     SnapRecyclerAdapter2 adapter2;
+    DroidNet mDroidNet;
+    Boolean toggle,toggle_back_from_toggle;
     SweetAlertDialog pDialog;
 //    SwipeRefreshLayout mSwipeRefreshLayout;
     int products_intent;
     TextView textView1;
-    private LabeledSwitch swToggle;
+    public static LabeledSwitch swToggle;
+    boolean lh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_products);
+
+        mDroidNet = DroidNet.getInstance();
+        mDroidNet.addInternetConnectivityListener(this);
+
 
         items=new ArrayList<>();
         items2=new ArrayList<>();
@@ -56,6 +68,14 @@ public class ProductsActivity extends BaseActivity {
 
         products_intent = getIntent().getIntExtra("Products_Id" , 0);
         Log.d("Products_Value" , ""+products_intent);
+
+         toggle = getIntent().getExtras().getBoolean("Toggle_Value");
+        Log.d("Toggl_Values" , ""+toggle);
+
+
+        toggle_back_from_toggle = getIntent().getBooleanExtra("Toggle_Value_Back22", false);
+        Log.d("Toggl_Values222" , ""+toggle_back_from_toggle);
+
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
 //        mSwipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
 
@@ -68,8 +88,13 @@ public class ProductsActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
 
-                Intent intent=new Intent(ProductsActivity.this  ,Main_MenuScreen.class );
+//                finish();
+
+                lh=swToggle.isOn();
+                Intent intent=new Intent(ProductsActivity.this , Main_MenuScreen.class);
+                intent.putExtra("Toggle_Value_Back" , lh);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -108,9 +133,40 @@ public class ProductsActivity extends BaseActivity {
 
         });
 
-        loadallimages();
 
 
+
+
+
+        if (toggle)
+        {
+            showdatainarabic();
+            swToggle.setOn(true);
+        }
+
+        else
+        {
+            loadallimages();
+            swToggle.setOn(false);
+        }
+
+
+//        if (Product_Detail.lh)
+//        {
+//            showdatainarabic();
+//            swToggle.setOn(true);
+//        }
+
+//        if (toggle_back_from_toggle)
+//        {
+//            showdatainarabic();
+//            swToggle.setOn(true);
+//        }
+//        else
+//        {
+//            loadallimages();
+//        }
+//
     }
 
 
@@ -145,30 +201,51 @@ public class ProductsActivity extends BaseActivity {
                         try {
                             JSONArray jsonArray =new JSONArray(response);
 
-                            items2.clear();
-
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject jsonObject = new JSONObject(String.valueOf(jsonArray.get(i)));
-                                Item dataObject = new Item();
-
-                                dataObject.setID(jsonObject.getInt("ID"));
-                                dataObject.setCategory(jsonObject.getString("Category"));
-                                dataObject.setProduct(jsonObject.getString("Product"));
-                                dataObject.setDescription(jsonObject.getString("Description"));
-                                dataObject.setImage(jsonObject.getString("Image"));
-                                dataObject.setPrice(jsonObject.getLong("Price"));
-
-
-                                items2.add(dataObject);
-                                adapter2.notifyDataSetChanged();
-
-                                runOnUiThread(new Runnable() {
+                            if (jsonArray.length()==0)
+                            {
+                                SweetAlertDialog pDialog = new SweetAlertDialog(ProductsActivity.this, SweetAlertDialog.ERROR_TYPE).setConfirmButton("OK" , new SweetAlertDialog.OnSweetClickListener() {
                                     @Override
-                                    public void run() {
-                                        Utilss.hideSweetLoader(pDialog);
+                                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+
+
                                     }
                                 });
+
+                                pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+                                pDialog.setTitleText("No Data Found");
+                                pDialog.setCancelable(true);
+                                pDialog.show();
                             }
+
+                            else
+                            {
+                                items2.clear();
+
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject jsonObject = new JSONObject(String.valueOf(jsonArray.get(i)));
+                                    Item dataObject = new Item();
+
+                                    dataObject.setID(jsonObject.getInt("ID"));
+                                    dataObject.setCategory(jsonObject.getString("Category"));
+                                    dataObject.setProduct(jsonObject.getString("Product"));
+                                    dataObject.setDescription(jsonObject.getString("Description"));
+                                    dataObject.setImage(jsonObject.getString("Image"));
+                                    dataObject.setPrice(jsonObject.getLong("Price"));
+
+
+                                    items2.add(dataObject);
+                                    adapter2.notifyDataSetChanged();
+
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Utilss.hideSweetLoader(pDialog);
+                                        }
+                                    });
+                                }
+                            }
+
+
 
 
                         } catch (JSONException e) {
@@ -323,30 +400,51 @@ public class ProductsActivity extends BaseActivity {
                         try {
                             JSONArray jsonArray =new JSONArray(response);
 
-                            items.clear();
-
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject jsonObject = new JSONObject(String.valueOf(jsonArray.get(i)));
-                                Item dataObject = new Item();
-
-                                dataObject.setID(jsonObject.getInt("ID"));
-                                dataObject.setCategory(jsonObject.getString("Category"));
-                                dataObject.setProduct(jsonObject.getString("Product"));
-                                dataObject.setDescription(jsonObject.getString("Description"));
-                                dataObject.setImage(jsonObject.getString("Image"));
-                                dataObject.setPrice(jsonObject.getLong("Price"));
-
-
-                                items.add(dataObject);
-                                adapter.notifyDataSetChanged();
-
-                                runOnUiThread(new Runnable() {
+                            if (jsonArray.length()==0)
+                            {
+                                SweetAlertDialog pDialog = new SweetAlertDialog(ProductsActivity.this, SweetAlertDialog.ERROR_TYPE).setConfirmButton("OK" , new SweetAlertDialog.OnSweetClickListener() {
                                     @Override
-                                    public void run() {
-                                        Utilss.hideSweetLoader(pDialog);
+                                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+
+
                                     }
                                 });
+
+                                pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+                                pDialog.setTitleText("No Data Found");
+                                pDialog.setCancelable(true);
+                                pDialog.show();
                             }
+
+                            else
+                            {
+                                items.clear();
+
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject jsonObject = new JSONObject(String.valueOf(jsonArray.get(i)));
+                                    Item dataObject = new Item();
+
+                                    dataObject.setID(jsonObject.getInt("ID"));
+                                    dataObject.setCategory(jsonObject.getString("Category"));
+                                    dataObject.setProduct(jsonObject.getString("Product"));
+                                    dataObject.setDescription(jsonObject.getString("Description"));
+                                    dataObject.setImage(jsonObject.getString("Image"));
+                                    dataObject.setPrice(jsonObject.getLong("Price"));
+
+
+                                    items.add(dataObject);
+                                    adapter.notifyDataSetChanged();
+
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Utilss.hideSweetLoader(pDialog);
+                                        }
+                                    });
+                                }
+                            }
+
+
 
 
                         } catch (JSONException e) {
@@ -378,5 +476,38 @@ public class ProductsActivity extends BaseActivity {
         stringRequest.setRetryPolicy(new DefaultRetryPolicy(10000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         queue.add(stringRequest);
 
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mDroidNet.removeInternetConnectivityChangeListener(this);
+    }
+
+    @Override
+    public void onInternetConnectivityChanged(boolean isConnected) {
+
+        if (isConnected) {
+            //do Stuff with internet
+//            netIsOn();
+        } else {
+            //no internet
+
+//            Toast.makeText(this, "Internet Off..!!", Toast.LENGTH_SHORT).show();
+
+            SweetAlertDialog pDialog = new SweetAlertDialog(ProductsActivity.this, SweetAlertDialog.ERROR_TYPE).setConfirmButton("OK" , new SweetAlertDialog.OnSweetClickListener() {
+                @Override
+                public void onClick(SweetAlertDialog sweetAlertDialog) {
+
+                    finishAffinity();
+                }
+            });
+
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+            pDialog.setTitleText("Internet Not Found");
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
     }
 }

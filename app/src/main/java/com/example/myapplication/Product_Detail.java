@@ -11,9 +11,13 @@ import android.graphics.Color;
 import android.os.Bundle;
 
 import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.droidnet.DroidListener;
+import com.droidnet.DroidNet;
 import com.github.angads25.toggle.LabeledSwitch;
 import com.github.angads25.toggle.interfaces.OnToggledListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -56,13 +60,14 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 
 import static com.example.myapplication.Utilss.hideSweetLoader;
 
-public class Product_Detail extends BaseActivity {
+public class Product_Detail extends BaseActivity implements DroidListener {
 
 
     private ArrayList<Product_Image> items2;
     private ArrayList<Item> items;
 
     ImageView imageView3;
+    String statusCode;
     private boolean clicked = false;
 
     private LabeledSwitch swToggle;
@@ -77,16 +82,19 @@ public class Product_Detail extends BaseActivity {
     SwipeRefreshLayout mSwipeRefreshLayout;
    ImageView imageView2;
     TextView textView_1, textView_2, textView_34,textView_3;
-    String text1, text2,text3, Category_Nam,text4,text5;
+    String text1, text2,text3, Category_Nam,text4,text5,text14;
     int Category_Id;
     public static ViewPager viewPager;
-    ViewPager viewPager2;
+//    ViewPager viewPager2;
+ boolean lh;
     ImageView image;
     int product_id;
     JSONObject jsonObject ;
     private int dotscount;
     private ImageView imageView4,imageView5;
+    DroidNet mDroidNet;
     CardView cardView_2;
+    Boolean toggle2;
 
     String ACTION_INTENT="custom-message";
 
@@ -96,6 +104,8 @@ public class Product_Detail extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product__detail);
 
+        mDroidNet = DroidNet.getInstance();
+        mDroidNet.addInternetConnectivityListener(this);
 
         Category_Nam = getIntent().getStringExtra("Category_name");
         Log.d("Category_nam", Category_Nam);
@@ -105,6 +115,9 @@ public class Product_Detail extends BaseActivity {
         Log.d("Category_id", "" + Category_Id);
 
         swToggle = findViewById(R.id.iv_toggle);
+
+        toggle2 = getIntent().getExtras().getBoolean("ValueBool2");
+        Log.d("Toggl_Values" , ""+toggle2);
 
         textView_1 = findViewById(R.id.textView_1);
         textView_2 = findViewById(R.id.textView_2);
@@ -153,36 +166,55 @@ public class Product_Detail extends BaseActivity {
             public void onSwitched(LabeledSwitch labeledSwitch, boolean isOn) {
                 // Implement your switching logic here
 
-                    if (isOn)
+                    if (!isOn)
                     {
-                        showdatainarabic();
-                    } else {
-
                         loadotherdata();
+//                        showdatainarabic();
+                    }
+                    else {
+                        showdatainarabic();
+
                     }
                 }
-
         });
-
-
-
-
-
 
 
         imageView2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-
-//               onBackPressed();
-
-               Intent intent=new Intent(Product_Detail.this , ProductsActivity.class);
-               startActivity(intent);
-
-//                onBackPressed();
+                lh=swToggle.isOn();
+                Intent intent=new Intent(Product_Detail.this , ProductsActivity.class);
+                intent.putExtra("Toggle_Value_Back22" , lh);
+                Log.d("Toggl_Values2225" , ""+lh);
+                startActivity(intent);
+                finish();
             }
         });
+
+
+
+
+        if (toggle2)
+        {
+
+            showdatainarabic();
+            swToggle.setOn(true);
+        }
+
+        else
+        {
+            loadotherdata();
+//            swToggle.(true);
+//            swToggle.setLabelOn("EN");
+
+        }
+
+
+
+
+
+
 
 
 //        image = findViewById(R.id.image);
@@ -191,7 +223,7 @@ public class Product_Detail extends BaseActivity {
         items = new ArrayList<>();
         items2=new ArrayList<>();
 
-        pDialog = Utilss.showSweetLoader(Product_Detail.this, SweetAlertDialog.PROGRESS_TYPE, "Fetching Data...");
+//        pDialog = Utilss.showSweetLoader(Product_Detail.this, SweetAlertDialog.PROGRESS_TYPE, "Fetching Data...");
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, new IntentFilter("custom-message"));
@@ -230,7 +262,7 @@ public class Product_Detail extends BaseActivity {
         });
 
 
-        loadotherdata();
+//        loadotherdata();
 
     }
 
@@ -253,7 +285,6 @@ public class Product_Detail extends BaseActivity {
 
         ViewGroup.MarginLayoutParams marginParams = (ViewGroup.MarginLayoutParams) cardView_2.getLayoutParams();
         marginParams.setMargins(960, marginParams.topMargin, marginParams.rightMargin, marginParams.bottomMargin);
-
 
         pDialog = Utilss.showSweetLoader(Product_Detail.this, SweetAlertDialog.PROGRESS_TYPE, "Fetching Data...");
         com.android.volley.RequestQueue queue = Volley.newRequestQueue(Product_Detail.this);
@@ -280,17 +311,29 @@ public class Product_Detail extends BaseActivity {
                     textView_2.setText(" درهم : " + text2);
                     textView_3.setText(text3);
 
-                    if (swToggle.isOn())
-                    {
-                        textView_34.setText(text5);
-                    }
-                    else
-                    {
-                        textView_34.setText(text4);
-                    }
-
+                    textView_34.setText(text5);
 
                     Log.d("ValueIsCategory" , Category_Nam);
+
+                    JSONArray jsonArray = jsonObject.getJSONArray("ProductImages");
+
+                    for (int i = 0; i < jsonArray.length(); i++)
+                    {
+                        JSONObject jsonObject2 = new JSONObject(String.valueOf(jsonArray.get(i)));
+                        Product_Image dataObject = new Product_Image();
+
+                        dataObject.setImage_Name(jsonObject2.getString("ImageName"));
+                        dataObject.setImagePath(jsonObject2.getString("ImagePath"));
+                        dataObject.setThumbnail(jsonObject2.getString("Thumbnail"));
+                        items2.add(dataObject);
+                    }
+
+
+                    ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(Product_Detail.this,items2);
+                    viewPager.setAdapter(viewPagerAdapter);
+
+
+
                     if (product_id == 0) {
 
                     } else {
@@ -306,44 +349,53 @@ public class Product_Detail extends BaseActivity {
                                         try {
                                             JSONArray jsonArray = new JSONArray(response);
 
-                                            items.clear();
+                                            if (jsonArray.length()==0)
+                                            {
 
-                                            for (int i = 0; i < jsonArray.length(); i++) {
-                                                JSONObject jsonObject = new JSONObject(String.valueOf(jsonArray.get(i)));
-                                                Item dataObject = new Item();
+                                            }
 
-                                                dataObject.setID(jsonObject.getInt("ID"));
-                                                dataObject.setCategory(jsonObject.getString("Category"));
-                                                dataObject.setProduct(jsonObject.getString("Product"));
-                                                dataObject.setDescription(jsonObject.getString("Description"));
-                                                dataObject.setImage(jsonObject.getString("Image"));
-                                                dataObject.setPrice(jsonObject.getLong("Price"));
+                                            else
+                                            {
+                                                items.clear();
+
+                                                for (int i = 0; i < jsonArray.length(); i++) {
+                                                    JSONObject jsonObject = new JSONObject(String.valueOf(jsonArray.get(i)));
+                                                    Item dataObject = new Item();
+
+                                                    dataObject.setID(jsonObject.getInt("ID"));
+                                                    dataObject.setCategory(jsonObject.getString("Category"));
+                                                    dataObject.setProduct(jsonObject.getString("Product"));
+                                                    dataObject.setDescription(jsonObject.getString("Description"));
+                                                    dataObject.setImage(jsonObject.getString("Image"));
+                                                    dataObject.setPrice(jsonObject.getLong("Price"));
 
 
-                                                items.add(dataObject);
+                                                    items.add(dataObject);
 //                                adapter.notifyDataSetChanged();
+
+                                                    runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            hideSweetLoader(pDialog);
+                                                        }
+                                                    });
+
+                                                }
+
+
+                                                adapter = new SnapRecyclerAdapter_Details(Product_Detail.this, items);
+                                                recyclerView.setLayoutManager(new LinearLayoutManager(Product_Detail.this, LinearLayoutManager.HORIZONTAL, false));
+                                                recyclerView.setAdapter(adapter);
 
                                                 runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
-                                                        hideSweetLoader(pDialog);
+
+                                                        Utilss.hideSweetLoader(pDialog);
                                                     }
                                                 });
-
                                             }
 
-
-                                            adapter = new SnapRecyclerAdapter_Details(Product_Detail.this, items);
-                                            recyclerView.setLayoutManager(new LinearLayoutManager(Product_Detail.this, LinearLayoutManager.HORIZONTAL, false));
-                                            recyclerView.setAdapter(adapter);
-
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-
-                                                    Utilss.hideSweetLoader(pDialog);
-                                                }
-                                            });
 
                                         } catch (JSONException e) {
                                             e.printStackTrace();
@@ -372,6 +424,8 @@ public class Product_Detail extends BaseActivity {
                                 headers.put("Authorization", MainActivity.value2);
                                 return headers;
                             }
+
+
                         };
 
                         queue.add(stringRequest);
@@ -383,6 +437,9 @@ public class Product_Detail extends BaseActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
+
+
             }
 
 
@@ -407,6 +464,16 @@ public class Product_Detail extends BaseActivity {
                 headers.put("Authorization", MainActivity.value2);
                 return headers;
             }
+
+
+//            @Override
+//            protected Response<String> parseNetworkResponse(NetworkResponse response) {
+//                statusCode = String.valueOf(response.statusCode);
+//                Log.d("StatusCode3", statusCode);
+//                //Handling logic
+//                return super.parseNetworkResponse(response);
+//            }
+
         };
         queue.add(stringRequest);
     }
@@ -434,7 +501,7 @@ public class Product_Detail extends BaseActivity {
                 Toast.makeText(context, "Error in retreive", Toast.LENGTH_SHORT).show();
             } else {
 
-                if (swToggle.isOn())
+                if (toggle2)
                 {
 
 
@@ -592,7 +659,7 @@ else
                 marginParams.bottomMargin);
 
 
-//        pDialog = Utilss.showSweetLoader(Product_Detail.this, SweetAlertDialog.PROGRESS_TYPE, "Fetching Data...");
+        pDialog = Utilss.showSweetLoader(Product_Detail.this, SweetAlertDialog.PROGRESS_TYPE, "Fetching Data...");
         com.android.volley.RequestQueue queue = Volley.newRequestQueue(Product_Detail.this);
         String url = "http://api.surveymenu.dwtdemo.com/api/products/{id}?id=" + Category_Id;
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, url, new com.android.volley.Response.Listener<String>() {
@@ -606,13 +673,16 @@ else
                             product_id = jsonObject.getInt("ProductCategoryID");
                             text3 = jsonObject.getString("ProductDesc");
                             text1 = jsonObject.getString("ProductName");
+                            text14 = jsonObject.getString("CategoryName");
 
                             text2 = jsonObject.getString("Price");
 
                             textView_1.setText(text1);
                             textView_2.setText(" AED : " + text2);
                             textView_3.setText(text3);
-                            textView_34.setText(Category_Nam);
+
+                            textView_34.setText(text14);
+
 
 
                             JSONArray jsonArray = jsonObject.getJSONArray("ProductImages");
@@ -742,5 +812,40 @@ else
         };
         queue.add(stringRequest);
 
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mDroidNet.removeInternetConnectivityChangeListener(this);
+    }
+
+    @Override
+    public void onInternetConnectivityChanged(boolean isConnected) {
+
+        if (isConnected) {
+            //do Stuff with internet
+//            netIsOn();
+        } else {
+            //no internet
+
+//            Toast.makeText(this, "Internet Off..!!", Toast.LENGTH_SHORT).show();
+
+            SweetAlertDialog pDialog = new SweetAlertDialog(Product_Detail.this, SweetAlertDialog.ERROR_TYPE).setConfirmButton("OK" , new SweetAlertDialog.OnSweetClickListener() {
+                @Override
+                public void onClick(SweetAlertDialog sweetAlertDialog) {
+
+                    finishAffinity();
+                }
+            });
+
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+            pDialog.setTitleText("Internet Not Found");
+            pDialog.setCancelable(true);
+            pDialog.show();
+
+
+        }
     }
 }

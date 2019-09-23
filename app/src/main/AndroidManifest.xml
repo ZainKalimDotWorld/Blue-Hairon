@@ -6,7 +6,18 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+
+    <uses-sdk android:maxSdkVersion="29" />
+
+
+    <!--<uses-sdk-->
+        <!--android:minSdkVersion="15"-->
+        <!--android:targetSdkVersion="21" />-->
+
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -15,19 +26,22 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:icon">
+        <activity android:name=".Feedback_Submit"
+            android:windowSoftInputMode="stateHidden" >
+
+        </activity>
+        <activity android:name=".Questions_Screen" />
+        <activity
+            android:name=".Feedback_Menu"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".Product_Detail"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.NoActionBar">
-
-
-
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Main_MenuScreen"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateHidden"></activity>
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".Value_Feedback"
             android:label="@string/title_activity_value__feedback"
@@ -35,21 +49,18 @@
             android:windowSoftInputMode="stateHidden" /> <!-- <activity android:name=".MainActivity3"> -->
         <!--  -->
         <!-- </activity> -->
-        <activity android:name=".ProductsActivity"
-            android:launchMode="singleTask">
-
-        </activity>
+        <activity
+            android:name=".ProductsActivity"
+            android:launchMode="singleTask" />
         <activity
             android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden">
-
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
 
         </activity>
     </application>

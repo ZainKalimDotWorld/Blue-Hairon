@@ -5,15 +5,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
 import androidx.core.content.ContextCompat;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -30,6 +34,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.droidnet.DroidListener;
+import com.droidnet.DroidNet;
+import com.splunk.mint.Mint;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,18 +57,19 @@ import okhttp3.RequestBody;
 
 import static android.R.layout.simple_spinner_item;
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener , DroidListener {
 
     private ArrayList<String> names7 = new ArrayList<String>();
     Spinner spLeaveSubject2;
-    public ArrayList<Pojo> lstAnime = new ArrayList<Pojo>();
+    public ArrayList<Pojo> lstAnime = new ArrayList<Pojo>();SweetAlertDialog pDialogss;
     SweetAlertDialog pdialog;
     ArrayAdapter<String> spinnerArrayAdapter;
     OkHttpClient client;
     JSONObject json;
-    static String value2,value24;
-    String value7,v1;
+    static String value2,value7,value24;
+    String v1;
     EditText customer_info;
+    private DroidNet mDroidNet;
 Button signin;
 int v11;
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -70,19 +78,22 @@ int v11;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Mint.initAndStartSession(this.getApplication(), "8566b133");
 
+        mDroidNet = DroidNet.getInstance();
+        mDroidNet.addInternetConnectivityListener(this);
 
         client = new OkHttpClient.Builder().connectTimeout(10, TimeUnit.SECONDS).writeTimeout(10, TimeUnit.SECONDS).readTimeout(10, TimeUnit.SECONDS).build();
 
         lstAnime = new ArrayList<>();
 
-        Window window = this.getWindow();
-// clear FLAG_TRANSLUCENT_STATUS flag:
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-// finally change the color
-        window.setStatusBarColor(ContextCompat.getColor(MainActivity.this,R.color.colorback));
+//        Window window = this.getWindow();
+//// clear FLAG_TRANSLUCENT_STATUS flag:
+//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//// finally change the color
+//        window.setStatusBarColor(ContextCompat.getColor(MainActivity.this,R.color.colorback));
 
 
         spLeaveSubject2 = (Spinner) findViewById(R.id.spLeaveSubject2);
@@ -113,6 +124,15 @@ int v11;
 
         retreivebranches();
 
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        return super.dispatchTouchEvent(ev);
     }
 
     private void loginapi()
@@ -188,7 +208,9 @@ int v11;
 
                                 JSONObject json2 = json.getJSONObject("data");
                                 value2 = json2.getString("accesstoken");
-                                value7 = json2.getString("survey");
+                                value7 = json2.getString("feedback_id");
+
+                                Log.d("Valuesss" , value2);
 
                                 Intent intent = new Intent(MainActivity.this, Value_Feedback.class);
 //                            intent.putExtra("Access_Token", value2);
@@ -239,6 +261,24 @@ int v11;
 
 
                             }
+
+
+                            else if (response.code()==401)
+                            {
+                                SweetAlertDialog pDialog = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.ERROR_TYPE).setConfirmButton("OK" , new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+
+                                        System.exit(0);
+                                    }
+                                });
+
+                                pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+                                pDialog.setTitleText("Session Expired");
+                                pDialog.setCancelable(true);
+                                pDialog.show();
+
+                            }
                         }
 
                         catch (JSONException e)
@@ -274,16 +314,12 @@ int v11;
         pdialog = Utilss.showSweetLoader(MainActivity.this, SweetAlertDialog.PROGRESS_TYPE, "Fetching Data...");
 
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://api.surveymenu.dwtdemo.com/api/Branch/GetBranches",
-                new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://api.surveymenu.dwtdemo.com/api/Branch/GetBranches", new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
 
 
-
                         Log.d("ResponseIs" , response);
-
-
 
                         Log.d("strrrrr", ">>" + response);
 
@@ -410,4 +446,43 @@ int v11;
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mDroidNet.removeInternetConnectivityChangeListener(this);
+    }
+
+    @Override
+    public void onInternetConnectivityChanged(final boolean isConnected) {
+
+
+        if (isConnected) {
+            //do Stuff with internet
+
+
+
+        } else {
+            //no internet
+
+//            Toast.makeText(this, "Internet Off..!!", Toast.LENGTH_SHORT).show();
+
+             pDialogss = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.ERROR_TYPE).setConfirmButton("OK" , new SweetAlertDialog.OnSweetClickListener() {
+                @Override
+                public void onClick(SweetAlertDialog sweetAlertDialog) {
+
+
+                    finishAffinity();
+                }
+            });
+
+            pDialogss.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+            pDialogss.setTitleText("Internet Not Found");
+            pDialogss.setCancelable(true);
+            pDialogss.show();
+
+
+        }
+    }
+
 }

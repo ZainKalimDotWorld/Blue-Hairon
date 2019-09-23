@@ -1,9 +1,12 @@
 package com.example.myapplication;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 
+import com.droidnet.DroidListener;
+import com.droidnet.DroidNet;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -17,12 +20,16 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.Toast;
 
-public class Value_Feedback extends AppCompatActivity {
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
+public class Value_Feedback extends AppCompatActivity implements DroidListener {
 
 
     ImageView imageView1;
     ImageView imageView2;
+    DroidNet mDroidNet;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -32,14 +39,16 @@ public class Value_Feedback extends AppCompatActivity {
 
 
 
+        mDroidNet = DroidNet.getInstance();
+        mDroidNet.addInternetConnectivityListener(this);
 
-        Window window = this.getWindow();
-// clear FLAG_TRANSLUCENT_STATUS flag:
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-// finally change the color
-        window.setStatusBarColor(ContextCompat.getColor(Value_Feedback.this,R.color.colorback));
+//        Window window = this.getWindow();
+//// clear FLAG_TRANSLUCENT_STATUS flag:
+//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//// finally change the color
+//        window.setStatusBarColor(ContextCompat.getColor(Value_Feedback.this,R.color.colorback));
 
 
         imageView1 = (ImageView) findViewById(R.id.imageView1);
@@ -48,7 +57,6 @@ public class Value_Feedback extends AppCompatActivity {
         imageView1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
 
                 Intent intent = new Intent(Value_Feedback.this , Main_MenuScreen.class);
                 startActivity(intent);
@@ -67,7 +75,7 @@ public class Value_Feedback extends AppCompatActivity {
             public void onClick(View v) {
 
 
-                Intent intent = new Intent(Value_Feedback.this , Main_MenuScreen.class);
+                Intent intent = new Intent(Value_Feedback.this , Feedback_Menu.class);
                 startActivity(intent);
             }
         });
@@ -83,4 +91,37 @@ public class Value_Feedback extends AppCompatActivity {
 //        startActivity(intent);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mDroidNet.removeInternetConnectivityChangeListener(this);
+    }
+
+    @Override
+    public void onInternetConnectivityChanged(boolean isConnected) {
+
+        if (isConnected) {
+            //do Stuff with internet
+//            netIsOn();
+        } else {
+            //no internet
+
+//            Toast.makeText(this, "Internet Off..!!", Toast.LENGTH_SHORT).show();
+
+            SweetAlertDialog pDialog = new SweetAlertDialog(Value_Feedback.this, SweetAlertDialog.ERROR_TYPE).setConfirmButton("OK" , new SweetAlertDialog.OnSweetClickListener() {
+                @Override
+                public void onClick(SweetAlertDialog sweetAlertDialog) {
+
+                    finishAffinity();
+                }
+            });
+
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+            pDialog.setTitleText("Internet Not Found");
+            pDialog.setCancelable(true);
+            pDialog.show();
+
+
+        }
+    }
 }
