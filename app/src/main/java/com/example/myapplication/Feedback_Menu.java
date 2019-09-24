@@ -4,14 +4,18 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EdgeEffect;
 import android.widget.EditText;
@@ -35,6 +39,10 @@ public class Feedback_Menu extends AppCompatActivity {
     EditText customer_info,customer_info2;
     Button home,next;
     String email_validation,contact_validation;
+    SweetAlertDialog pdialog;
+
+    String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,14 +83,18 @@ public class Feedback_Menu extends AppCompatActivity {
                 email_validation = customer_info.getText().toString();
                 contact_validation = customer_info2.getText().toString();
 
-                if (email_validation.equals("") && contact_validation.equals("")) {
+                if (email_validation.equals("") && contact_validation.equals(""))
+                {
                     SweetAlertDialog pDialog = new SweetAlertDialog(Feedback_Menu.this, SweetAlertDialog.ERROR_TYPE);
                     pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
-                    pDialog.setTitleText("Fill Up The Fields..!!");
+                    pDialog.setTitleText("Please fill form properly..!!");
                     pDialog.setCancelable(true);
                     pDialog.show();
                     return;
-                } else if (contact_validation.equals("")) {
+                }
+
+                else if (contact_validation.equals(""))
+                {
                     SweetAlertDialog pDialog = new SweetAlertDialog(Feedback_Menu.this, SweetAlertDialog.ERROR_TYPE);
                     pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
                     pDialog.setTitleText("Contact Number Is Required..!!");
@@ -90,20 +102,46 @@ public class Feedback_Menu extends AppCompatActivity {
                     pDialog.show();
                     return;
                 }
-                else
+
+                else if (email_validation.matches(emailPattern) && email_validation.length() >0 && contact_validation.length() >0)
                 {
                     customer_info.setText("");
                     customer_info2.setText("");
                     loadServey();
+                }
+
+                else
+                {
+                    SweetAlertDialog pDialog = new SweetAlertDialog(Feedback_Menu.this, SweetAlertDialog.ERROR_TYPE);
+                    pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+                    pDialog.setTitleText("Enter Correct Email Format..!!");
+                    pDialog.setCancelable(true);
+                    pDialog.show();
+                    return;
                 }
             }
         });
     }
 
 
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+
+    public void onBackPressed() {
+//        Intent intent = new Intent(Product_Detail.this, ProductsActivity.class);
+//        finish();
+//        startActivity(intent);
+    }
 
     public void  loadServey()
     {
+        pdialog = Utilss.showSweetLoader(Feedback_Menu.this, SweetAlertDialog.PROGRESS_TYPE, "Fetching Data...");
         String makeUrl = "http://api.surveymenu.dwtdemo.com/api/en/feedback/"+MainActivity.value7+"/question";
         JsonObjectRequest sr = new JsonObjectRequest(Request.Method.GET, makeUrl, null, new Response.Listener<JSONObject>() {
             @Override
@@ -111,20 +149,24 @@ public class Feedback_Menu extends AppCompatActivity {
                 Log.e("HttpClient", "success! response: " + response.toString());
                 try {
                     JSONObject mRes = response.getJSONObject("data");
-
                     Intent i = new Intent(getApplicationContext(),Questions_Screen.class);
                     i.putExtra("mylist",  mRes.getString("questions"));
                     i.putExtra("FeedbackId", MainActivity.value7);
                     i.putExtra("token", MainActivity.value2);
-
-
-
                     i.putExtra("email", email_validation);
                     i.putExtra("phone", contact_validation);
 
 
 
                     startActivity(i);
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            Utilss.hideSweetLoader(pdialog);
+                        }
+                    });
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -134,6 +176,14 @@ public class Feedback_Menu extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        Utilss.hideSweetLoader(pdialog);
+                    }
+                });
             }
         }) {
 

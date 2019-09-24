@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -38,6 +39,7 @@ public class Questions_Screen extends AppCompatActivity implements View.OnClickL
     int count = 0;
     MyData[] myData;
     String emails_intent;
+    Button imageView2;
     private ImageView rate1, rate2, rate3, rate4, rate5, sendBtn;
     int[] ratings;
 int contact_intent;
@@ -64,6 +66,18 @@ int contact_intent;
         question = (TextView) findViewById(R.id.textview);
         question.setText(myData[count].getQuestion());
 
+        imageView2 = findViewById(R.id.home_btn);
+
+
+        imageView2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent =new Intent(Questions_Screen.this , Value_Feedback.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         rate1 = (ImageView) findViewById(R.id.imageView1);
         rate2 = (ImageView) findViewById(R.id.imageView25);
@@ -130,6 +144,12 @@ int contact_intent;
         loadQuestion(count);
     }
 
+
+    public void onBackPressed() {
+//        Intent intent = new Intent(Product_Detail.this, ProductsActivity.class);
+//        finish();
+//        startActivity(intent);
+    }
 
 //    public void submitResults(int[] ratings, String comments) {
 //

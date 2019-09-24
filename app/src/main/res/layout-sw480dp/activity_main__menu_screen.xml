@@ -17,7 +17,7 @@
         android:layout_margin="10dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="0dp"
-        android:src="@mipmap/company_logo"
+        android:src="@mipmap/logoss"
         android:layout_marginLeft="20dp" />
 
     <RelativeLayout

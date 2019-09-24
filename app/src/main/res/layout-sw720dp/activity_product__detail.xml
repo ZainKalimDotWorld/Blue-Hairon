@@ -34,8 +34,8 @@
             android:layout_marginLeft="-1200dp"
             android:layout_marginStart="1160dp"
             android:textSize="14sp"
-            app:colorOn="#000000"
-            app:colorBorder="#000000"
+            app:colorOn="#2a3895"
+            app:colorBorder="#2a3895"
             app:textOn="EN"
             app:textOff="AR"
             />

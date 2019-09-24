@@ -2,10 +2,14 @@ package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -23,6 +27,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class Feedback_Submit extends AppCompatActivity {
 
 
@@ -32,12 +38,14 @@ public class Feedback_Submit extends AppCompatActivity {
     int o;
     String ik;
     MyData[] myData;
+    Button home_btn;
 //    int[] ratings;
 
 String emails_intent_final;
 int contact_intent_final;
     int go;
     int[] ratings;
+    SweetAlertDialog pdialog;
 
 
 
@@ -62,6 +70,19 @@ int contact_intent_final;
 //        ratings = new int[myData.length];
         Log.d("Array22" , ""+ratings);
 
+        home_btn= findViewById(R.id.home_btn);
+
+
+        home_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(Feedback_Submit.this , Value_Feedback.class);
+                startActivity(intent);
+                finish();
+
+            }
+        });
 
 
 
@@ -87,6 +108,7 @@ int contact_intent_final;
 
     public void submitResults(int[] ratings )
     {
+        pdialog = Utilss.showSweetLoader(Feedback_Submit.this, SweetAlertDialog.PROGRESS_TYPE, "Submitting...");
 
         ki = customer_info.getText().toString();
         JSONObject level1 = new JSONObject();         // Included object
@@ -125,9 +147,17 @@ int contact_intent_final;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, myUrl, level1, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Toast.makeText(Feedback_Submit.this, response.toString(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(Feedback_Submit.this, response.toString(), Toast.LENGTH_SHORT).show();
                 Log.e("Success",response.toString());
 
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        Utilss.hideSweetLoader(pdialog);
+                    }
+                });
                 Intent intent = new Intent(Feedback_Submit.this , ThankuActivity.class);
                 startActivity(intent);
                 finish();
@@ -137,6 +167,14 @@ int contact_intent_final;
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(Feedback_Submit.this, error.toString(), Toast.LENGTH_SHORT).show();
                 Log.e("Error",error.toString());
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        Utilss.hideSweetLoader(pdialog);
+                    }
+                });
 
             }
         }){
@@ -165,8 +203,19 @@ int contact_intent_final;
 
     }
 
-
-
-
+    public void onBackPressed() {
+//        Intent intent = new Intent(Product_Detail.this, ProductsActivity.class);
+//        finish();
+//        startActivity(intent);
     }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+}
 

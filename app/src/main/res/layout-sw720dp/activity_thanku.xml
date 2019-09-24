@@ -15,22 +15,30 @@
 
 
 
-
-
-
-
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginRight="-60dp"
-        android:layout_marginBottom="21dp"
-        android:paddingTop="0dp"
-        android:src="@mipmap/company_logo" />
+        android:id="@+id/imageView1"
+        android:layout_width="150dp"
+        android:layout_height="130dp"
+        android:layout_marginStart="70dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:src="@mipmap/logoss"
+        android:layout_marginLeft="20dp" />
+
+
+
+    <!--<ImageView-->
+        <!--android:id="@+id/imageView"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_marginTop="0dp"-->
+        <!--android:layout_marginEnd="10dp"-->
+        <!--android:layout_marginRight="-60dp"-->
+        <!--android:layout_marginBottom="21dp"-->
+        <!--android:paddingTop="0dp"-->
+        <!--android:src="@mipmap/logoss" />-->
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -46,7 +54,7 @@ android:layout_centerInParent="true"        android:id="@+id/layout"
             android:fontFamily="@font/arial"
             android:text="Thank you for your valuable feedback. Visit us again.."
             android:textColor="#000000"
-            android:textSize="45dp"
+            android:textSize="40dp"
             android:textStyle="bold" />
 
 

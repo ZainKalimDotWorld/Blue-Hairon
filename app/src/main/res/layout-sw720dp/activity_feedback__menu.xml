@@ -18,13 +18,12 @@
 
     <ImageView
         android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
+        android:layout_width="150dp"
+        android:layout_height="130dp"
+        android:layout_marginStart="70dp"
         android:layout_marginTop="20dp"
-        android:src="@mipmap/company_logo"
+        android:src="@mipmap/logoss"
         android:layout_marginLeft="20dp" />
-
 
     <TextView
         android:id="@+id/textView"
@@ -45,12 +44,11 @@
         android:layout_width="430dp"
         android:layout_height="70.0dip"
         android:layout_below="@id/textView"
-        android:maxLength="12"
         android:layout_marginLeft="435dp"
         android:maxLines="1"
         android:textSize="18sp"
         android:hint="Email Address"
-        android:inputType="textPassword"
+        android:inputType="textEmailAddress"
         android:background="@mipmap/password"
         android:fontFamily="@font/arial"
         android:padding="10dp"
@@ -69,7 +67,7 @@
         android:maxLines="1"
         android:textSize="18sp"
         android:hint="Contact Number"
-        android:inputType="textPassword"
+        android:inputType="number"
         android:background="@mipmap/password"
         android:fontFamily="@font/arial"
         android:padding="10dp"

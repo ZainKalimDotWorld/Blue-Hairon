@@ -12,15 +12,24 @@
 
 
 
+    <!--<ImageView-->
+        <!--android:id="@+id/imageView2"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_margin="10dp"-->
+        <!--android:layout_marginStart="10dp"-->
+        <!--android:layout_marginTop="0dp"-->
+        <!--android:src="@mipmap/home_btn"-->
+        <!--android:layout_marginLeft="20dp"/>-->
+
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="0dp"
-        android:src="@mipmap/home_btn"
-        android:layout_marginLeft="20dp"/>
+        android:layout_width="150dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="20dp"
+        android:src="@mipmap/logoss"
+        android:layout_marginLeft="20dp" />
 
 
     <ImageView
@@ -36,29 +45,31 @@
 
 
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:layout_margin="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="0dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:src="@mipmap/company_logo"
-        android:layout_marginLeft="20dp"
-        android:layout_alignParentRight="true" />
+
+    <!--<ImageView-->
+        <!--android:id="@+id/imageView"-->
+        <!--android:layout_width="50dp"-->
+        <!--android:layout_height="60dp"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_marginEnd="40dp"-->
+        <!--android:layout_marginRight="250dp"-->
+        <!--android:layout_marginBottom="11dp"-->
+        <!--android:paddingTop="0dp"-->
+        <!--android:layout_marginStart="1166dp"-->
+        <!--android:src="@mipmap/logoss"-->
+        <!--android:layout_marginLeft="1136dp"-->
+         <!--/>-->
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_marginTop="160dp"
-        android:layout_marginLeft="40dp"
+        android:layout_marginLeft="60dp"
         android:id="@+id/layout"
         android:layout_height="80dp">
 
         <TextView
             android:id="@+id/textview"
-            android:layout_width="980dp"
+            android:layout_width="920dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="120dp"
 
@@ -76,8 +87,9 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_below="@id/layout"
-        android:layout_marginLeft="40dp"
+        android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
         android:id="@+id/layout22"
         android:layout_height="280dp">
 
@@ -120,7 +132,7 @@
             android:layout_marginBottom="10dp"
             android:layout_marginTop="30dp"
             android:src="@mipmap/gud"
-            android:layout_marginLeft="100dp"/>
+            android:layout_marginLeft="80dp"/>
 
         <ImageView
             android:id="@+id/imageView25"
@@ -130,7 +142,7 @@
             android:layout_toRightOf="@id/imageView1"
             android:layout_marginTop="0dp"
             android:src="@mipmap/good__emoji"
-            android:layout_marginLeft="100dp"/>
+            android:layout_marginLeft="80dp"/>
 
 
 
@@ -148,7 +160,7 @@
             android:layout_marginBottom="10dp"
             android:layout_marginTop="30dp"
             android:src="@mipmap/fair_btn"
-            android:layout_marginLeft="100dp"/>
+            android:layout_marginLeft="80dp"/>
 
         <ImageView
             android:id="@+id/imageView3"
@@ -158,7 +170,7 @@
             android:layout_toRightOf="@id/imageView25"
             android:layout_marginTop="0dp"
             android:src="@mipmap/fair_emoji"
-            android:layout_marginLeft="100dp"/>
+            android:layout_marginLeft="80dp"/>
 
 
 
@@ -176,7 +188,7 @@
             android:layout_marginBottom="10dp"
             android:layout_marginTop="30dp"
             android:src="@mipmap/poor_btn"
-            android:layout_marginLeft="100dp"/>
+            android:layout_marginLeft="80dp"/>
 
         <ImageView
             android:id="@+id/imageView4"
@@ -186,9 +198,40 @@
             android:layout_toRightOf="@id/imageView3"
             android:layout_marginTop="0dp"
             android:src="@mipmap/poor_emoji"
-            android:layout_marginLeft="100dp"/>
+            android:layout_marginLeft="80dp"/>
 
     </RelativeLayout>
+
+
+
+    <Button
+        android:id="@+id/home_btn"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:background="@drawable/cust_border_black_radius_10_withborder"
+        android:fontFamily="@font/arial"
+        android:layout_margin="10dp"
+        android:layout_below="@id/layout22"
+        android:layout_centerHorizontal="true"
+        android:text="Home"
+        android:textSize="20dp"
+        android:textAllCaps="true"
+        android:textColor="#ffffff"
+        android:textStyle="bold" />
+
+
+
+    <!--<ImageView-->
+    <!--android:id="@+id/imageView223"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_margin="10dp"-->
+        <!--android:background="@drawable/cust_border_black_radius_10_withborder"-->
+        <!--android:layout_below="@id/layout22"-->
+        <!--android:layout_centerHorizontal="true"-->
+    <!--android:src="@mipmap/home_btn"-->
+    <!--android:layout_marginLeft="20dp"/>-->
 
 
 </RelativeLayout>

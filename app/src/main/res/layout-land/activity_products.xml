@@ -39,7 +39,7 @@
             android:layout_marginTop="0dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:src="@mipmap/company_logo"
+            android:src="@mipmap/logoss"
             android:layout_marginLeft="20dp"
             android:layout_alignParentRight="true" />
 
