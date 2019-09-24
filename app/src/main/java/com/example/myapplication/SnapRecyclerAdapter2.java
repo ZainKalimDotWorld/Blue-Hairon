@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -68,6 +69,7 @@ public class SnapRecyclerAdapter2 extends RecyclerView.Adapter<SnapRecyclerAdapt
                 intent.putExtra("Category_Id" , item.getID());
                 intent.putExtra("Category_name" , item.getCategory());
                 context.startActivity(intent);
+
             }
         });
     }

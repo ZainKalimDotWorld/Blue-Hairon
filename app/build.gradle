@@ -19,12 +19,11 @@ android {
     }
 
 
-
     repositories {
         maven { url "https://jitpack.io" }
-            maven {
-                url uri('mint-plugin-repo-5.2.2')
-            }
+        maven {
+            url uri('mint-plugin-repo-5.2.2')
+        }
 
     }
 
@@ -59,6 +58,8 @@ dependencies {
     implementation 'com.android.support:viewpager:29.+'
 
     implementation 'com.github.angads25:toggle:1.0.0'
+    implementation 'com.google.code.gson:gson:2.8.2'
+
 
     implementation 'com.google.android.material:material:1.0.0'
     testImplementation 'junit:junit:4.12'

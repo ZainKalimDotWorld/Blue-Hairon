@@ -185,10 +185,8 @@ public class Product_Detail extends BaseActivity implements DroidListener {
 
                 lh=swToggle.isOn();
                 Intent intent=new Intent(Product_Detail.this , ProductsActivity.class);
-                intent.putExtra("Toggle_Value_Back22" , lh);
-                Log.d("Toggl_Values2225" , ""+lh);
                 startActivity(intent);
-                finish();
+//                finish();
             }
         });
 
@@ -205,6 +203,7 @@ public class Product_Detail extends BaseActivity implements DroidListener {
         else
         {
             loadotherdata();
+            swToggle.setOn(false);
 //            swToggle.(true);
 //            swToggle.setLabelOn("EN");
 
@@ -501,10 +500,8 @@ public class Product_Detail extends BaseActivity implements DroidListener {
                 Toast.makeText(context, "Error in retreive", Toast.LENGTH_SHORT).show();
             } else {
 
-                if (toggle2)
+                if (swToggle.isOn() && toggle2)
                 {
-
-
                     com.android.volley.RequestQueue queue = Volley.newRequestQueue(Product_Detail.this);
                     String url = "http://api.surveymenu.dwtdemo.com/api/products/{id}?id=" +ItemName;
 
@@ -571,7 +568,17 @@ public class Product_Detail extends BaseActivity implements DroidListener {
                     queue.add(stringRequest);
 
                 }
-else
+
+
+
+
+
+
+
+
+
+// && toggle2
+else if (!swToggle.isOn())
                 {
 
                     com.android.volley.RequestQueue queue = Volley.newRequestQueue(Product_Detail.this);

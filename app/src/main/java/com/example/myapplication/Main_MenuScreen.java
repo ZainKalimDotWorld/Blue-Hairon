@@ -73,7 +73,6 @@ boolean bool_value;
         setContentView(R.layout.activity_main__menu_screen);
 
 
-
         mDroidNet = DroidNet.getInstance();
         mDroidNet.addInternetConnectivityListener(this);
 

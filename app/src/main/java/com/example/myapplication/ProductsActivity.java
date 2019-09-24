@@ -44,13 +44,14 @@ public class ProductsActivity extends BaseActivity implements DroidListener {
     SnapRecyclerAdapter adapter;
     SnapRecyclerAdapter2 adapter2;
     DroidNet mDroidNet;
-    Boolean toggle,toggle_back_from_toggle;
+    Boolean toggle;
     SweetAlertDialog pDialog;
 //    SwipeRefreshLayout mSwipeRefreshLayout;
     int products_intent;
     TextView textView1;
     public static LabeledSwitch swToggle;
     boolean lh;
+    String xyz;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,16 +73,10 @@ public class ProductsActivity extends BaseActivity implements DroidListener {
          toggle = getIntent().getExtras().getBoolean("Toggle_Value");
         Log.d("Toggl_Values" , ""+toggle);
 
-
-        toggle_back_from_toggle = getIntent().getBooleanExtra("Toggle_Value_Back22", false);
-        Log.d("Toggl_Values222" , ""+toggle_back_from_toggle);
-
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
 //        mSwipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
 
         swToggle = findViewById(R.id.iv_toggle);
-
-
 
         imageView2 = findViewById(R.id.imageView2);
         imageView2.setOnClickListener(new View.OnClickListener() {
@@ -138,34 +133,30 @@ public class ProductsActivity extends BaseActivity implements DroidListener {
 
 
 
-        if (toggle)
-        {
-            showdatainarabic();
-            swToggle.setOn(true);
-        }
-
+if (toggle)
+{
+    showdatainarabic();
+    swToggle.setOn(true);
+}
         else
         {
             loadallimages();
             swToggle.setOn(false);
+
         }
 
 
-//        if (Product_Detail.lh)
-//        {
-//            showdatainarabic();
-//            swToggle.setOn(true);
-//        }
+
+
 
 //        if (toggle_back_from_toggle)
 //        {
+////            showdatainarabic();
 //            showdatainarabic();
-//            swToggle.setOn(true);
+////            swToggle.setOn(true);
 //        }
-//        else
-//        {
-//            loadallimages();
-//        }
+//
+
 //
     }
 
@@ -178,7 +169,7 @@ public class ProductsActivity extends BaseActivity implements DroidListener {
     }
 
 
-    private void showdatainarabic()
+    public void showdatainarabic()
     {
 
         adapter2 = new SnapRecyclerAdapter2(this, items2);
@@ -372,7 +363,7 @@ public class ProductsActivity extends BaseActivity implements DroidListener {
 
 
 
-    private void loadallimages()
+    public void loadallimages()
     {
 
         adapter = new SnapRecyclerAdapter(this, items);
