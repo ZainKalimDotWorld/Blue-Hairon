@@ -25,6 +25,21 @@
         android:src="@mipmap/logoss"
         android:layout_marginLeft="20dp" />
 
+
+
+    <com.github.angads25.toggle.LabeledSwitch
+        android:id="@+id/iv_toggle"
+        android:layout_width="90dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="15dp"
+        android:textSize="14sp"
+        app:colorOn="#2a3895"
+        app:colorBorder="#2a3895"
+        app:textOn="EN"
+        app:textOff="AR"
+        android:layout_marginLeft="1105dp" />
+
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
@@ -47,13 +62,12 @@
         android:layout_marginLeft="435dp"
         android:maxLines="1"
         android:textSize="18sp"
-        android:hint="Email Address"
-        android:inputType="textEmailAddress"
+       android:hint="Email Address"
         android:background="@mipmap/password"
         android:fontFamily="@font/arial"
-        android:padding="10dp"
+        android:padding="25dp"
         android:paddingStart="25dp"
-        android:paddingLeft="25dp" />
+        android:paddingLeft="5dp" />
 
 
     <EditText
@@ -65,12 +79,11 @@
         android:layout_marginLeft="435dp"
         android:layout_marginBottom="20dp"
         android:maxLines="1"
-        android:textSize="18sp"
         android:hint="Contact Number"
-        android:inputType="number"
+        android:textSize="18sp"
         android:background="@mipmap/password"
         android:fontFamily="@font/arial"
-        android:padding="10dp"
+        android:padding="25dp"
         android:paddingStart="25dp"
         android:paddingLeft="25dp" />
 

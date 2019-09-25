@@ -11,10 +11,12 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,6 +65,7 @@ TextView  textview;
     public static LabeledSwitch swToggle;
     DroidNet mDroidNet;
 boolean bool_value;
+Button imageView4;
 //    SwipeRefreshLayout mSwipeRefreshLayout;
 
 
@@ -79,15 +82,24 @@ boolean bool_value;
         bool_value = getIntent().getBooleanExtra("Toggle_Value_Back",false);
         Log.d("bool_value" , ""+bool_value);
 
-
-
-
         mFlowerList = new ArrayList<>();
         mFlowerList2 = new ArrayList<>();
         mFlowerList3 = new ArrayList<>();
 
 
 
+        imageView4 = findViewById(R.id.imageView4);
+
+
+        imageView4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent =new Intent(Main_MenuScreen.this , Value_Feedback.class);
+                startActivity(intent);
+                finish();
+            }
+        });
         swToggle = findViewById(R.id.iv_toggle);
 
 

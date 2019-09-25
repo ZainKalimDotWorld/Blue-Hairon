@@ -40,6 +40,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -70,7 +71,7 @@ public class Product_Detail extends BaseActivity implements DroidListener {
     String statusCode;
     private boolean clicked = false;
 
-    private LabeledSwitch swToggle;
+    static LabeledSwitch swToggle;
     int index = 0;
     int ItemName;
     LinearLayout indicator;
@@ -80,7 +81,7 @@ public class Product_Detail extends BaseActivity implements DroidListener {
     private static int NUM_PAGES = 0;
     SweetAlertDialog pDialog, dialog2;
     SwipeRefreshLayout mSwipeRefreshLayout;
-   ImageView imageView2;
+   Button imageView2;
     TextView textView_1, textView_2, textView_34,textView_3;
     String text1, text2,text3, Category_Nam,text4,text5,text14;
     int Category_Id;
@@ -159,7 +160,32 @@ public class Product_Detail extends BaseActivity implements DroidListener {
 //
 //        });
 
+        imageView2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                Boolean values = swToggle.isOn();
+                if (values)
+                {
+                    ProductsActivity.swToggle.setOn(values);
+                    Intent intent=new Intent(Product_Detail.this , ProductsActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+
+                else
+                {
+                    ProductsActivity.swToggle.setOn(false);
+                    Intent intent=new Intent(Product_Detail.this , ProductsActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+//                Intent intent=new Intent(Product_Detail.this , ProductsActivity.class);
+//                intent.putExtra("Third_Second" , swToggle.isOn());
+//                Log.d("Toggle_Value3" , ""+swToggle.isOn());
+
+            }
+        });
 
         swToggle.setOnToggledListener(new OnToggledListener() {
             @Override
@@ -179,16 +205,7 @@ public class Product_Detail extends BaseActivity implements DroidListener {
         });
 
 
-        imageView2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                lh=swToggle.isOn();
-                Intent intent=new Intent(Product_Detail.this , ProductsActivity.class);
-                startActivity(intent);
-//                finish();
-            }
-        });
 
 
 

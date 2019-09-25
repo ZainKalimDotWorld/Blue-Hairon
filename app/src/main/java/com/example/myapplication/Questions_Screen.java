@@ -43,6 +43,7 @@ public class Questions_Screen extends AppCompatActivity implements View.OnClickL
     private ImageView rate1, rate2, rate3, rate4, rate5, sendBtn;
     int[] ratings;
 int contact_intent;
+Boolean bool_value;
     String data, fbid, token, comments;
 
     @Override
@@ -51,6 +52,11 @@ int contact_intent;
         setContentView(R.layout.activity_questions__screen);
 
         data = getIntent().getStringExtra("mylist");
+
+
+
+//                bool_value = getIntent().getExtras().getBoolean("Toggle_State");
+//                Log.e("Bool_Value", ""+bool_value);
 
         emails_intent = getIntent().getStringExtra("email");
         contact_intent = getIntent().getIntExtra("phone" , 0);
@@ -67,6 +73,17 @@ int contact_intent;
         question.setText(myData[count].getQuestion());
 
         imageView2 = findViewById(R.id.home_btn);
+
+
+        if (Feedback_Menu.swToggle.isOn())
+        {
+            imageView2.setText("الصفحة الرئيسية");
+        }
+
+        else
+        {
+            imageView2.setText("HOME");
+        }
 
 
         imageView2.setOnClickListener(new View.OnClickListener() {
@@ -113,6 +130,8 @@ int contact_intent;
 
             intent.putExtra("Email_Value", emails_intent);
             intent.putExtra("Contact_Value", contact_intent);
+
+            intent.putExtra("Again_Bool_Value", bool_value);
 
             Log.d("Array", "" + ratings);
             startActivity(intent);

@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -37,7 +39,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class ProductsActivity extends BaseActivity implements DroidListener {
 
-    ImageView imageView2;
+    Button imageView2;
     private ArrayList<Item> items;
     private ArrayList<Item> items2;
     private RecyclerView recyclerView;
@@ -51,6 +53,7 @@ public class ProductsActivity extends BaseActivity implements DroidListener {
     TextView textView1;
     public static LabeledSwitch swToggle;
     boolean lh;
+    Boolean third_Value;
     String xyz;
 
     @Override
@@ -72,6 +75,11 @@ public class ProductsActivity extends BaseActivity implements DroidListener {
 
          toggle = getIntent().getExtras().getBoolean("Toggle_Value");
         Log.d("Toggl_Values" , ""+toggle);
+
+
+//        Boolean lovers = getIntent().getExtras().getBoolean("Third_Second");
+//        Log.d("third_Value" , ""+lovers);
+
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
 //        mSwipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
@@ -132,15 +140,25 @@ public class ProductsActivity extends BaseActivity implements DroidListener {
 
 
 
-
-if (toggle)
+ if (toggle)
 {
     showdatainarabic();
+//    Toast.makeText(ProductsActivity.this, "Here2", Toast.LENGTH_SHORT).show();
     swToggle.setOn(true);
 }
+
+//else if (lovers)
+//{
+//
+////    Toast.makeText(ProductsActivity.this, "Toggle_Value6" + first_Value, Toast.LENGTH_SHORT).show();
+//    swToggle.setOn(third_Value);
+//    showdatainarabic();
+//}
+
+
         else
         {
-            loadallimages();
+//            loadallimages();
             swToggle.setOn(false);
 
         }
@@ -161,6 +179,37 @@ if (toggle)
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        Toast.makeText(this, "Here2", Toast.LENGTH_SHORT).show();
+
+
+        Product_Detail product_detail=new Product_Detail();
+
+if (product_detail.swToggle==null)
+{
+    loadallimages();
+    swToggle.setOn(false);
+
+}
+
+else if (product_detail.swToggle.isOn())
+{
+    showdatainarabic();
+    swToggle.setOn(true);
+    Toast.makeText(ProductsActivity.this, "Heres", Toast.LENGTH_SHORT).show();
+}
+
+else
+{
+    loadallimages();
+    Toast.makeText(ProductsActivity.this, "Here1", Toast.LENGTH_SHORT).show();
+    swToggle.setOn(false);
+}
+
+
+    }
 
     public void onBackPressed() {
 //        Intent intent = new Intent(Product_Detail.this, ProductsActivity.class);
