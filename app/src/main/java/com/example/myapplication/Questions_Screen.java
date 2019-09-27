@@ -41,6 +41,9 @@ public class Questions_Screen extends AppCompatActivity implements View.OnClickL
     String emails_intent;
     Button imageView2;
     private ImageView rate1, rate2, rate3, rate4, rate5, sendBtn;
+
+    private ImageView imageView22, imageView23, imageView24,imageView26;
+
     int[] ratings;
 int contact_intent;
 Boolean bool_value;
@@ -72,17 +75,42 @@ Boolean bool_value;
         question = (TextView) findViewById(R.id.textview);
         question.setText(myData[count].getQuestion());
 
+
+
+        imageView22 = (ImageView) findViewById(R.id.imageView22);
+        imageView23 = (ImageView) findViewById(R.id.imageView23);
+        imageView24 = (ImageView) findViewById(R.id.imageView24);
+        imageView26 = (ImageView) findViewById(R.id.imageView26);
+
+
+
+        rate1 = (ImageView) findViewById(R.id.imageView1);
+        rate2 = (ImageView) findViewById(R.id.imageView25);
+        rate3 = (ImageView) findViewById(R.id.imageView3);
+        rate4 = (ImageView) findViewById(R.id.imageView4);
+
         imageView2 = findViewById(R.id.home_btn);
 
 
         if (Feedback_Menu.swToggle.isOn())
         {
             imageView2.setText("الصفحة الرئيسية");
+
+            imageView22.setImageResource(R.mipmap.very_gud_arabic);
+            imageView23.setImageResource(R.mipmap.gud_arabic);
+            imageView24.setImageResource(R.mipmap.fair_arabic);
+            imageView26.setImageResource(R.mipmap.poor_arabic);
+
         }
 
         else
         {
             imageView2.setText("HOME");
+
+            imageView22.setImageResource(R.mipmap.very_gud);
+            imageView23.setImageResource(R.mipmap.gud);
+            imageView24.setImageResource(R.mipmap.fair_btn);
+            imageView26.setImageResource(R.mipmap.poor_btn);
         }
 
 
@@ -96,10 +124,6 @@ Boolean bool_value;
             }
         });
 
-        rate1 = (ImageView) findViewById(R.id.imageView1);
-        rate2 = (ImageView) findViewById(R.id.imageView25);
-        rate3 = (ImageView) findViewById(R.id.imageView3);
-        rate4 = (ImageView) findViewById(R.id.imageView4);
 
 //        sendBtn = (Button) findViewById(R.id.send_comment);
 //

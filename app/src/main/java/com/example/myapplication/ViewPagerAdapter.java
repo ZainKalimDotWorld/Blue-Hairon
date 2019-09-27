@@ -73,7 +73,7 @@ public class ViewPagerAdapter extends PagerAdapter {
                 pdialog = Utilss.showSweetLoader(context, SweetAlertDialog.PROGRESS_TYPE, "Submitting...");
 
                 items2 = new ArrayList<>();
-                items.clear();
+//                items.clear();
                 com.android.volley.RequestQueue queue = Volley.newRequestQueue(context);
                 String url = "http://api.surveymenu.dwtdemo.com/api/products/{id}?id=" +items_id;
 
@@ -89,7 +89,7 @@ public class ViewPagerAdapter extends PagerAdapter {
 
                             for (int i = 0; i < jsonArray.length(); i++)
                             {
-                                items.clear();
+//                                items.clear();
                                 JSONObject jsonObject2 = new JSONObject(String.valueOf(jsonArray.get(i)));
                                 Product_Image dataObject = new Product_Image();
 

@@ -308,6 +308,7 @@ public class Product_Detail extends BaseActivity implements DroidListener {
     private void showdatainarabic()
     {
 
+        Log.d("Autherizationss" , ""+MainActivity.value2);
         ViewGroup.MarginLayoutParams marginParams = (ViewGroup.MarginLayoutParams) cardView_2.getLayoutParams();
         marginParams.setMargins(960, marginParams.topMargin, marginParams.rightMargin, marginParams.bottomMargin);
 
@@ -686,6 +687,8 @@ else if (!swToggle.isOn())
     private void loadotherdata() {
 
 
+
+        Log.d("Autherizationss" , ""+MainActivity.value2);
         ViewGroup.MarginLayoutParams marginParams = (ViewGroup.MarginLayoutParams) cardView_2.getLayoutParams();
         marginParams.setMargins(60,
                 marginParams.topMargin, 0, //notice only changing right margin
