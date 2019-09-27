@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
@@ -31,6 +32,7 @@ public class Main_Manu_Adapter extends RecyclerView.Adapter<FlowerViewHolder> {
     private Context mContext;
     private List<MainCategories_Pojo> mFlowerList;
     SweetAlertDialog progressbar;
+    static int ji;
 
     Main_Manu_Adapter(Context mContext, List<MainCategories_Pojo> mFlowerList) {
         this.mContext = mContext;
@@ -63,12 +65,16 @@ public class Main_Manu_Adapter extends RecyclerView.Adapter<FlowerViewHolder> {
 
                 Intent intent =new Intent(mContext , ProductsActivity.class);
 
+                ji = mFlowerList.get(position).getID();
                 boolean l =Main_MenuScreen.swToggle.isOn();
                 Log.d("ValueOfBool" , ""+l);
 
                 intent.putExtra("Toggle_Value" , l);
                 intent.putExtra("Products_Id" , mFlowerList.get(position).getID());
                 mContext.startActivity(intent);
+
+
+//                ((Activity) mContext).finish();
             }
         });
     }

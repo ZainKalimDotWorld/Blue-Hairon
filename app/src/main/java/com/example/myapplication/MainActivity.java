@@ -1,32 +1,27 @@
 package com.example.myapplication;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NavUtils;
-import androidx.core.content.ContextCompat;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -44,8 +39,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -57,89 +50,80 @@ import okhttp3.RequestBody;
 
 import static android.R.layout.simple_spinner_item;
 
+//implements AdapterView.OnItemSelectedListener , DroidListener
+
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener , DroidListener {
 
     private ArrayList<String> names7 = new ArrayList<String>();
+
+    private ArrayList<String> names8 = new ArrayList<String>();
+    private ArrayList<String> names9 = new ArrayList<String>();
+
     Spinner spLeaveSubject2;
-    public ArrayList<Pojo> lstAnime = new ArrayList<Pojo>();SweetAlertDialog pDialogss;
+    public ArrayList<Pojo> lstAnime = new ArrayList<Pojo>();
+
+
+    public ArrayList<Pojo> lstAnime2 = new ArrayList<Pojo>();
+    public ArrayList<Pojo> lstAnim3 = new ArrayList<Pojo>();
+
+    SweetAlertDialog pDialogss;
     SweetAlertDialog pdialog;
     ArrayAdapter<String> spinnerArrayAdapter;
     OkHttpClient client;
     JSONObject json;
-    static String value2,value7,value24;
+    static String value2, value7, value24;
     String v1;
     EditText customer_info;
     private DroidNet mDroidNet;
-Button signin;
-int v11;
+    Button signin;
+    int v11;
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+        setContentView(R.layout.activity_main_portrait);
+//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
 
         Mint.initAndStartSession(this.getApplication(), "8566b133");
-
         mDroidNet = DroidNet.getInstance();
         mDroidNet.addInternetConnectivityListener(this);
 
         client = new OkHttpClient.Builder().connectTimeout(10, TimeUnit.SECONDS).writeTimeout(10, TimeUnit.SECONDS).readTimeout(10, TimeUnit.SECONDS).build();
-
         lstAnime = new ArrayList<>();
 
-//        Window window = this.getWindow();
-//// clear FLAG_TRANSLUCENT_STATUS flag:
-//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
-//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//// finally change the color
-//        window.setStatusBarColor(ContextCompat.getColor(MainActivity.this,R.color.colorback));
+
+                    spLeaveSubject2 = (Spinner) findViewById(R.id.spLeaveSubject2);
+            customer_info = (EditText) findViewById(R.id.customer_info);
+            spLeaveSubject2.setOnItemSelectedListener(MainActivity.this);
+
+            signin = (Button) findViewById(R.id.signin);
+
+            signin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
 
-        spLeaveSubject2 = (Spinner) findViewById(R.id.spLeaveSubject2);
-        customer_info = (EditText) findViewById(R.id.customer_info);
+                   loginapi_landscape();
 
-        spLeaveSubject2.setOnItemSelectedListener(MainActivity.this);
-//        spLeaveSubject2.setPrompt("Select your favorite Planet!");
+                    // code for portrait mode
+                }
+            });
 
-//        spLeaveSubject2.setAdapter(
-//                new NothingSelectedSpinnerAdapter(adapter,
-//                        R.layout.contact_spinner_row_nothing_selected,
-//                        // R.layout.contact_spinner_nothing_selected_dropdown, // Optional
-//                        this));
+            retreivebranches();
 
 
-        signin = (Button) findViewById(R.id.signin);
 
-        signin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                
-                loginapi();
-//                Intent intent = new Intent( MainActivity.this , Value_Feedback.class);
-//                startActivity(intent);
-            }
-        });
-
-        retreivebranches();
-
+        // code for landscape mode
     }
 
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (getCurrentFocus() != null) {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-        }
-        return super.dispatchTouchEvent(ev);
-    }
-
-    private void loginapi()
+    private void loginapi_landscape()
     {
 
-
-        if (customer_info.getText().toString().equals(""))
+                if (customer_info.getText().toString().equals(""))
         {
             SweetAlertDialog pDialog = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.ERROR_TYPE);
             pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
@@ -301,12 +285,19 @@ int v11;
                 e.printStackTrace();
             }
         }
-
-
-
-
-
     }
+
+
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+
 
     private void retreivebranches()
     {
@@ -331,6 +322,7 @@ int v11;
 
                             for (int i = 0; i < obj.length(); i++) {
 
+                                lstAnime.clear();
                                 Pojo playerModel7 = new Pojo();
                                 JSONObject dataobj = obj.getJSONObject(i);
 
@@ -414,19 +406,6 @@ int v11;
         stringRequest.setRetryPolicy(new DefaultRetryPolicy(10000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         requestQueue.add(stringRequest);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     @Override

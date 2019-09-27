@@ -325,10 +325,12 @@ public class Feedback_Menu extends AppCompatActivity {
     {
         textView.setText("We value your feedback!");
         customer_info.setHint("Email Address");
-//        customer_info.setTextDirection(View.TEXT_DIRECTION_LTR);
+        customer_info.setTextDirection(View.TEXT_DIRECTION_LTR);
 //        customer_info.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
         customer_info2.setHint("Contact Number");
-//        customer_info2.setInputType(InputType.TYPE_CLASS_PHONE);
+        customer_info2.setTextDirection(View.TEXT_DIRECTION_LTR);
+
+        //        customer_info2.setInputType(InputType.TYPE_CLASS_PHONE);
 //        customer_info2.setTextDirection(View.TEXT_DIRECTION_FIRST_STRONG_LTR);
         home.setText("HOME");
         next.setText("NEXT");

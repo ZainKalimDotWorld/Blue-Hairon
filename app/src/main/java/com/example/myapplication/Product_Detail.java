@@ -115,6 +115,7 @@ public class Product_Detail extends BaseActivity implements DroidListener {
         Category_Id = getIntent().getIntExtra("Category_Id", 0);
         Log.d("Category_id", "" + Category_Id);
 
+        Log.d("Category_Idss" , ""+Category_Id);
         swToggle = findViewById(R.id.iv_toggle);
 
         toggle2 = getIntent().getExtras().getBoolean("ValueBool2");
@@ -165,24 +166,32 @@ public class Product_Detail extends BaseActivity implements DroidListener {
             public void onClick(View v) {
 
                 Boolean values = swToggle.isOn();
-                if (values)
-                {
-                    ProductsActivity.swToggle.setOn(values);
-                    Intent intent=new Intent(Product_Detail.this , ProductsActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-
-                else
-                {
-                    ProductsActivity.swToggle.setOn(false);
-                    Intent intent=new Intent(Product_Detail.this , ProductsActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
+//                if (values)
+//                {
+//                    ProductsActivity.swToggle.setOn(values);
+//                    Intent intent=new Intent(Product_Detail.this , ProductsActivity.class);
+//                    startActivity(intent);
+//                    finish();
+//                }
+//
+//                else
+//                {
+//                    ProductsActivity.swToggle.setOn(false);
+//                    Intent intent=new Intent(Product_Detail.this , ProductsActivity.class);
+//                    startActivity(intent);
+//                    finish();
+//                }
 //                Intent intent=new Intent(Product_Detail.this , ProductsActivity.class);
 //                intent.putExtra("Third_Second" , swToggle.isOn());
 //                Log.d("Toggle_Value3" , ""+swToggle.isOn());
+
+
+                Intent intent = new Intent(Product_Detail.this , ProductsActivity.class);
+                intent.putExtra("Third_Second" , swToggle.isOn());
+                Log.d("Toggle_Value3" , ""+swToggle.isOn());
+                startActivity(intent);
+
+                finish();
 
             }
         });

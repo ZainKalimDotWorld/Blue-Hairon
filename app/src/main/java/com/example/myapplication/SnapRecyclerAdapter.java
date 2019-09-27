@@ -70,6 +70,8 @@ public class SnapRecyclerAdapter extends RecyclerView.Adapter<SnapRecyclerAdapte
                 intent.putExtra("Category_name" , item.getCategory());
                 context.startActivity(intent);
 
+                ((Activity) context).finish();
+
             }
         });
     }

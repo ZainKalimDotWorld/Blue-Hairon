@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
@@ -17,6 +19,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -73,7 +77,7 @@ Button imageView4;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main__menu_screen);
+        setContentView(R.layout.activity_main__menu_screen_landscape);
 
 
         mDroidNet = DroidNet.getInstance();
@@ -103,10 +107,7 @@ Button imageView4;
         swToggle = findViewById(R.id.iv_toggle);
 
 
-//        final CircleProgressBar circleProgressBar = (CircleProgressBar) rootView.findViewById(R.id.custom_progressBar);
         mRecyclerView = findViewById(R.id.recyclerview);
-//        mSwipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
-
         dataListAdapter = new Main_Manu_Adapter(Main_MenuScreen.this, mFlowerList);
         dataListAdapter.setDataList(mFlowerList);
 
@@ -121,12 +122,6 @@ Button imageView4;
 
 
         textview = (TextView )findViewById(R.id.textView123);
-//        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                updatemenu();
-//            }
-//        });
 
 
         if (bool_value)    //if true
@@ -158,6 +153,10 @@ Button imageView4;
 
 //        retreiveCategories();
     }
+
+
+
+
 
 
 

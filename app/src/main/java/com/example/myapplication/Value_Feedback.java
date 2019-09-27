@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import com.droidnet.DroidNet;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -19,7 +21,10 @@ import android.text.method.CharacterPickerDialog;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -35,24 +40,15 @@ public class Value_Feedback extends AppCompatActivity implements DroidListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_value__feedback);
+        setContentView(R.layout.activity_value__feedback_landscape);
 
 
 
         mDroidNet = DroidNet.getInstance();
         mDroidNet.addInternetConnectivityListener(this);
 
-//        Window window = this.getWindow();
-//// clear FLAG_TRANSLUCENT_STATUS flag:
-//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
-//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//// finally change the color
-//        window.setStatusBarColor(ContextCompat.getColor(Value_Feedback.this,R.color.colorback));
-
 
         imageView1 = (ImageView) findViewById(R.id.imageView1);
-
 
         imageView1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,10 +58,6 @@ public class Value_Feedback extends AppCompatActivity implements DroidListener {
                 startActivity(intent);
             }
         });
-
-
-
-
 
         imageView2 = (ImageView) findViewById(R.id.imageView2);
 
@@ -83,6 +75,9 @@ public class Value_Feedback extends AppCompatActivity implements DroidListener {
 
 
 
+
+
+
     }
 
     public void onBackPressed() {
@@ -96,6 +91,9 @@ public class Value_Feedback extends AppCompatActivity implements DroidListener {
         super.onDestroy();
         mDroidNet.removeInternetConnectivityChangeListener(this);
     }
+
+
+
 
     @Override
     public void onInternetConnectivityChanged(boolean isConnected) {
