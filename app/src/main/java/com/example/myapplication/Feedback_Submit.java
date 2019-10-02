@@ -73,6 +73,8 @@ int contact_intent_final;
         emails_intent_final = getIntent().getStringExtra("Email_Value");
         contact_intent_final = getIntent().getIntExtra("Contact_Value" , 0);
 
+        Log.d("Contact_Value" , ""+contact_intent_final);
+
         Gson gson = new Gson();
         myData = gson.fromJson(go, MyData[].class);
 //        ratings = new int[myData.length];

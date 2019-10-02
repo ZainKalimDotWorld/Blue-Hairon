@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
@@ -120,8 +121,16 @@ public class ProductsActivity extends BaseActivity implements DroidListener {
         });
 
 
-        SnapHelper snapHelper = new GravitySnapHelper(Gravity.START);
-        snapHelper.attachToRecyclerView(recyclerView);
+//        SnapHelper snapHelper = new GravitySnapHelper(Gravity.START);
+//        snapHelper.attachToRecyclerView(recyclerView);
+
+        GridLayoutManager mGridLayoutManager = new GridLayoutManager(ProductsActivity.this, 2);
+        int spanCount = 2; // 3 columns
+        int spacing = 0; // 50px
+        boolean includeEdge = true;
+        recyclerView.addItemDecoration(new ItemOffsetDecoration(spanCount, spacing, includeEdge));
+        recyclerView.setLayoutManager(mGridLayoutManager);
+//        recyclerView.setHasFixedSize(true);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setHasFixedSize(true);
@@ -201,11 +210,11 @@ public class ProductsActivity extends BaseActivity implements DroidListener {
         if (toggle) {
             showdatainarabic();
             swToggle.setOn(toggle);
-            Toast.makeText(ProductsActivity.this, "Toggle_Value6" + third_Value, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(ProductsActivity.this, "Toggle_Value6" + third_Value, Toast.LENGTH_SHORT).show();
         } else if (third_Value) {
 
             showdatainarabic();
-            Toast.makeText(ProductsActivity.this, "Toggle_Value6" + toggle, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(ProductsActivity.this, "Toggle_Value6" + toggle, Toast.LENGTH_SHORT).show();
             swToggle.setOn(third_Value);
 
         } else {
