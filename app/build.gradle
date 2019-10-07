@@ -18,16 +18,12 @@ android {
         }
     }
 
-
     repositories {
         maven { url "https://jitpack.io" }
         maven {
             url uri('mint-plugin-repo-5.2.2')
         }
-
     }
-
-
 }
 
 dependencies {
