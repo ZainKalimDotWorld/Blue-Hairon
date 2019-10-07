@@ -65,10 +65,11 @@ public class SnapRecyclerAdapter extends RecyclerView.Adapter<SnapRecyclerAdapte
                 Log.d("ValueOfBool2" , ""+l2);
                 intent.putExtra("ValueBool2" ,l2);
 
-
                 intent.putExtra("Category_Id" , item.getID());
                 intent.putExtra("Category_name" , item.getCategory());
                 context.startActivity(intent);
+
+                ((Activity) context).finish();
 
             }
         });

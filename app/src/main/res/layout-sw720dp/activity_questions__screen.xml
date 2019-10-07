@@ -38,7 +38,7 @@
         android:src="@mipmap/circle"
         android:layout_height="1200dp"
         android:layout_marginEnd="-71dp"
-        android:translationY="220dp"
+        android:translationY="420dp"
         tools:ignore="RtlCompat"
         android:layout_alignParentEnd="true" />
 
@@ -71,8 +71,8 @@
             android:id="@+id/textview"
             android:layout_width="920dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="120dp"
-
+            android:layout_marginLeft="0dp"
+android:layout_marginRight="120dp"
             android:fontFamily="@font/arial"
             android:text="What changes would this company have to make for you to give it an even higher rating ?"
             android:textColor="#000000"
@@ -85,13 +85,13 @@
 
 
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_below="@id/layout"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="30dp"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
         android:id="@+id/layout22"
-        android:layout_height="280dp">
+        android:layout_height="600dp">
 
 
 
@@ -132,7 +132,7 @@
             android:layout_marginBottom="10dp"
             android:layout_marginTop="30dp"
             android:src="@mipmap/gud"
-            android:layout_marginLeft="80dp"/>
+            android:layout_marginLeft="100dp"/>
 
         <ImageView
             android:id="@+id/imageView25"
@@ -142,7 +142,7 @@
             android:layout_toRightOf="@id/imageView1"
             android:layout_marginTop="0dp"
             android:src="@mipmap/good__emoji"
-            android:layout_marginLeft="80dp"/>
+            android:layout_marginLeft="100dp"/>
 
 
 
@@ -156,49 +156,49 @@
             android:id="@+id/imageView26"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/imageView24"
+           android:layout_below="@id/imageView1"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="30dp"
             android:src="@mipmap/fair_btn"
-            android:layout_marginLeft="80dp"/>
+            android:layout_marginLeft="150dp"/>
 
         <ImageView
             android:id="@+id/imageView3"
             android:layout_width="170dp"
             android:layout_height="170dp"
             android:layout_below="@id/imageView26"
-            android:layout_toRightOf="@id/imageView25"
             android:layout_marginTop="0dp"
             android:src="@mipmap/fair_emoji"
-            android:layout_marginLeft="80dp"/>
-
-
-
-
-
+            android:layout_marginLeft="150dp"/>
 
 
 
 
         <ImageView
-            android:id="@+id/imageView28"
+            android:id="@+id/imageView27"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/imageView25"
             android:layout_toRightOf="@id/imageView26"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="30dp"
             android:src="@mipmap/poor_btn"
-            android:layout_marginLeft="80dp"/>
+            android:layout_marginLeft="100dp"/>
 
         <ImageView
             android:id="@+id/imageView4"
             android:layout_width="170dp"
             android:layout_height="170dp"
-            android:layout_below="@id/imageView26"
             android:layout_toRightOf="@id/imageView3"
+            android:layout_below="@id/imageView26"
             android:layout_marginTop="0dp"
             android:src="@mipmap/poor_emoji"
-            android:layout_marginLeft="80dp"/>
+            android:layout_marginLeft="110dp"/>
+
+
+
+
+
 
     </RelativeLayout>
 
@@ -206,13 +206,13 @@
 
     <Button
         android:id="@+id/home_btn"
-        android:layout_width="200dp"
+        android:layout_width="230dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="0dp"
         android:background="@drawable/cust_border_black_radius_10_withborder"
         android:fontFamily="@font/arial"
-        android:layout_margin="10dp"
         android:layout_below="@id/layout22"
+        android:layout_margin="10dp"
         android:layout_centerHorizontal="true"
         android:text="Home"
         android:textSize="20dp"

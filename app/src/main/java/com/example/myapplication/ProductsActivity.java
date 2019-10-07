@@ -1,6 +1,8 @@
 package com.example.myapplication;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
@@ -45,285 +48,252 @@ public class ProductsActivity extends BaseActivity implements DroidListener {
     private RecyclerView recyclerView;
     SnapRecyclerAdapter adapter;
     SnapRecyclerAdapter2 adapter2;
+
+    Boolean third_Value;
+
+
+    //Portrait
+    SnapRecyclerAdapter3 adapter3;
+    SnapRecyclerAdapter4 adapter4;
+
+
     DroidNet mDroidNet;
-    Boolean toggle;
+    Boolean toggle,toggle_back_from_toggle;
     SweetAlertDialog pDialog;
-//    SwipeRefreshLayout mSwipeRefreshLayout;
-    int products_intent;
+    //    SwipeRefreshLayout mSwipeRefreshLayout;
+    int products_intent,products_intent2;
     TextView textView1;
     public static LabeledSwitch swToggle;
     boolean lh;
-    Boolean third_Value;
-    String xyz;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_products);
-
-        mDroidNet = DroidNet.getInstance();
-        mDroidNet.addInternetConnectivityListener(this);
 
 
-        items=new ArrayList<>();
-        items2=new ArrayList<>();
-
-        textView1 = (TextView) findViewById(R.id.textView1234);
-
-        products_intent = getIntent().getIntExtra("Products_Id" , 0);
-        Log.d("Products_Value" , ""+products_intent);
-
-         toggle = getIntent().getExtras().getBoolean("Toggle_Value");
-        Log.d("Toggl_Values" , ""+toggle);
+        products_intent = getIntent().getIntExtra("Products_Id", 0);
+        Log.d("Products_Value", "" + products_intent);
 
 
-//        Boolean lovers = getIntent().getExtras().getBoolean("Third_Second");
-//        Log.d("third_Value" , ""+lovers);
-
-
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
-//        mSwipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
-
-        swToggle = findViewById(R.id.iv_toggle);
-
-        imageView2 = findViewById(R.id.imageView2);
-        imageView2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-//                finish();
-
-                lh=swToggle.isOn();
-                Intent intent=new Intent(ProductsActivity.this , Main_MenuScreen.class);
-                intent.putExtra("Toggle_Value_Back" , lh);
-                startActivity(intent);
-                finish();
-            }
-        });
-
-
-        SnapHelper snapHelper = new GravitySnapHelper(Gravity.START);
-        snapHelper.attachToRecyclerView(recyclerView);
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        recyclerView.setHasFixedSize(true);
-
-
-
-
-
-//        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                updatemenu();
-//            }
-//        });
-
-
-        swToggle.setOnToggledListener(new OnToggledListener() {
-            @Override
-            public void onSwitched(LabeledSwitch labeledSwitch, boolean isOn) {
-                // Implement your switching logic here
-
-                if (isOn)
-                {
-                    showdatainarabic();
-                } else {
-
-                    loadallimages();
-                }
-            }
-
-        });
-
-
-
-
-
- if (toggle)
-{
-    showdatainarabic();
-//    Toast.makeText(ProductsActivity.this, "Here2", Toast.LENGTH_SHORT).show();
-    swToggle.setOn(true);
-}
-
-//else if (lovers)
-//{
-//
-////    Toast.makeText(ProductsActivity.this, "Toggle_Value6" + first_Value, Toast.LENGTH_SHORT).show();
-//    swToggle.setOn(third_Value);
-//    showdatainarabic();
-//}
-
-
-        else
-        {
-//            loadallimages();
-            swToggle.setOn(false);
+        if (products_intent == 0) {
+            products_intent2 = Main_Manu_Adapter.ji;
+            Log.d("products_intent22", "" + products_intent2);
 
         }
 
 
 
 
+        int currentOrientation = this.getResources().getConfiguration().orientation;
 
-//        if (toggle_back_from_toggle)
-//        {
-////            showdatainarabic();
-//            showdatainarabic();
-////            swToggle.setOn(true);
+        if (currentOrientation == Configuration.ORIENTATION_PORTRAIT) {
+            this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+            setContentView(R.layout.activity_products);
+
+            mDroidNet = DroidNet.getInstance();
+            mDroidNet.addInternetConnectivityListener(this);
+
+
+            items = new ArrayList<>();
+            items2 = new ArrayList<>();
+
+            textView1 = (TextView) findViewById(R.id.textView1234);
+
+            toggle = getIntent().getExtras().getBoolean("Toggle_Value");
+            Log.d("Toggl_Values", "" + toggle);
+
+            if (toggle == null) {
+
+            } else {
+
+            }
+
+
+            recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
+
+            swToggle = findViewById(R.id.iv_toggle);
+
+            imageView2 = findViewById(R.id.imageView2);
+            imageView2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+//                finish();
+
+                    lh = swToggle.isOn();
+                    Intent intent = new Intent(ProductsActivity.this, Main_MenuScreen.class);
+                    intent.putExtra("Toggle_Value_Back", lh);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+
+
+            SnapHelper snapHelper = new GravitySnapHelper(Gravity.START);
+            snapHelper.attachToRecyclerView(recyclerView);
+
+            recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+            recyclerView.setHasFixedSize(true);
+
+            swToggle.setOnToggledListener(new OnToggledListener() {
+                @Override
+                public void onSwitched(LabeledSwitch labeledSwitch, boolean isOn) {
+                    // Implement your switching logic here
+
+                    if (isOn) {
+                        showdatainarabic();
+                    } else {
+
+                        loadallimages();
+                    }
+                }
+
+            });
+
+
+
+        }
+
+        else
+        {
+            this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
+            setContentView(R.layout.activity_products_landscape);
+
+            mDroidNet = DroidNet.getInstance();
+            mDroidNet.addInternetConnectivityListener(this);
+
+
+            items = new ArrayList<>();
+            items2 = new ArrayList<>();
+
+            textView1 = (TextView) findViewById(R.id.textView1234);
+
+
+
+
+            toggle = getIntent().getExtras().getBoolean("Toggle_Value");
+            Log.d("Toggl_Values", "" + toggle);
+
+            if (toggle == null) {
+
+            } else {
+
+            }
+
+
+            recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
+
+            swToggle = findViewById(R.id.iv_toggle);
+
+            imageView2 = findViewById(R.id.imageView2);
+            imageView2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+//                finish();
+
+                    lh = swToggle.isOn();
+                    Intent intent = new Intent(ProductsActivity.this, Main_MenuScreen.class);
+                    intent.putExtra("Toggle_Value_Back", lh);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+
+
+            SnapHelper snapHelper = new GravitySnapHelper(Gravity.START);
+            snapHelper.attachToRecyclerView(recyclerView);
+
+            recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+            recyclerView.setHasFixedSize(true);
+
+            swToggle.setOnToggledListener(new OnToggledListener() {
+                @Override
+                public void onSwitched(LabeledSwitch labeledSwitch, boolean isOn) {
+                    // Implement your switching logic here
+
+                    if (isOn) {
+                        showdatainarabic();
+                    } else {
+
+                        loadallimages();
+                    }
+                }
+
+            });
+
+        }
+
+
+
+
+//        int orientation = this.getResources().getConfiguration().orientation;
+//        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//
+//
+//
+//        } else {
+//
+//            //portrait
+//
 //        }
-//
 
-//
+
+
+
+
+
+
+
     }
+
+
 
 
     @Override
     protected void onResume() {
         super.onResume();
 //        Toast.makeText(this, "Here2", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(ff.this, "Heres11", Toast.LENGTH_SHORT).show();
 
 
-        Product_Detail product_detail=new Product_Detail();
-
-if (product_detail.swToggle==null)
-{
-    loadallimages();
-    swToggle.setOn(false);
-
-}
-
-else if (product_detail.swToggle.isOn())
-{
-    showdatainarabic();
-    swToggle.setOn(true);
-    Toast.makeText(ProductsActivity.this, "Heres", Toast.LENGTH_SHORT).show();
-}
-
-else
-{
-    loadallimages();
-    Toast.makeText(ProductsActivity.this, "Here1", Toast.LENGTH_SHORT).show();
-    swToggle.setOn(false);
-}
+        third_Value = getIntent().getBooleanExtra("Third_Second", false);
+        Log.d("third_Value", "" + third_Value);
 
 
-    }
+        if (toggle) {
+            showdatainarabic();
+            swToggle.setOn(toggle);
+//            Toast.makeText(ProductsActivity.this, "Toggle_Value6" + third_Value, Toast.LENGTH_SHORT).show();
+        } else if (third_Value) {
 
-    public void onBackPressed() {
-//        Intent intent = new Intent(Product_Detail.this, ProductsActivity.class);
-//        finish();
-//        startActivity(intent);
-    }
+            showdatainarabic();
+//            Toast.makeText(ProductsActivity.this, "Toggle_Value6" + toggle, Toast.LENGTH_SHORT).show();
+            swToggle.setOn(third_Value);
 
-
-    public void showdatainarabic()
-    {
-
-        adapter2 = new SnapRecyclerAdapter2(this, items2);
-        adapter2.setDataList(items2);
-        recyclerView.setAdapter(adapter2);
-
-
-        textView1.setText("شهي يقفز في الفم. نحن نخدم العاطفة");
-        pDialog = Utilss.showSweetLoader(ProductsActivity.this, SweetAlertDialog.PROGRESS_TYPE, "Fetching Data...");
-
-        com.android.volley.RequestQueue queue = Volley.newRequestQueue(ProductsActivity.this);
-        String url = "http://api.surveymenu.dwtdemo.com/api/ar/category/"+products_intent+"/products?pg=1";
-        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, url,
-                new com.android.volley.Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                        Log.d("Json-response1", response);
-
-                        try {
-                            JSONArray jsonArray =new JSONArray(response);
-
-                            if (jsonArray.length()==0)
-                            {
-                                SweetAlertDialog pDialog = new SweetAlertDialog(ProductsActivity.this, SweetAlertDialog.ERROR_TYPE).setConfirmButton("OK" , new SweetAlertDialog.OnSweetClickListener() {
-                                    @Override
-                                    public void onClick(SweetAlertDialog sweetAlertDialog) {
-
-
-                                    }
-                                });
-
-                                pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
-                                pDialog.setTitleText("No Data Found");
-                                pDialog.setCancelable(true);
-                                pDialog.show();
-                            }
-
-                            else
-                            {
-                                items2.clear();
-
-                                for (int i = 0; i < jsonArray.length(); i++) {
-                                    JSONObject jsonObject = new JSONObject(String.valueOf(jsonArray.get(i)));
-                                    Item dataObject = new Item();
-
-                                    dataObject.setID(jsonObject.getInt("ID"));
-                                    dataObject.setCategory(jsonObject.getString("Category"));
-                                    dataObject.setProduct(jsonObject.getString("Product"));
-                                    dataObject.setDescription(jsonObject.getString("Description"));
-                                    dataObject.setImage(jsonObject.getString("Image"));
-                                    dataObject.setPrice(jsonObject.getLong("Price"));
-
-
-                                    items2.add(dataObject);
-                                    adapter2.notifyDataSetChanged();
-
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Utilss.hideSweetLoader(pDialog);
-                                        }
-                                    });
-                                }
-                            }
-
-
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-
-                }, new com.android.volley.Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Utilss.hideSweetLoader(pDialog);
-                    }
-                });
-            }
-        }) {
-            @Override
-            public Map getHeaders() {
-                HashMap headers = new HashMap();
-                headers.put("Authorization", "Bearer "+MainActivity.value2);
-                return headers;
-            }
-        };
-
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(10000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        queue.add(stringRequest);
+        } else {
+            loadallimages();
+            swToggle.setOn(false);
+        }
 
     }
 
 
-//    private void updatemenu()
+
+
+
+
+//    private void loadallimagesportrait()
 //    {
+//
+//        adapter3 = new SnapRecyclerAdapter3(this, items);
+//        adapter3.setDataList(items);
+//        recyclerView.setAdapter(adapter3);
+//
+//        textView1.setText("Deliciousness jumping into the mouth. We serve passion");
 //        pDialog = Utilss.showSweetLoader(ProductsActivity.this, SweetAlertDialog.PROGRESS_TYPE, "Fetching Data...");
-//        items2= new ArrayList<>();
 //
 //        com.android.volley.RequestQueue queue = Volley.newRequestQueue(ProductsActivity.this);
 //        String url = "http://api.surveymenu.dwtdemo.com/api/en/category/"+products_intent+"/products?pg=1";
@@ -332,48 +302,67 @@ else
 //                    @Override
 //                    public void onResponse(String response) {
 //
+//
+//
+//
+//
+//
+//
 //                        Log.d("Json-response1", response);
 //
 //                        try {
 //                            JSONArray jsonArray =new JSONArray(response);
 //
-//                            items.clear();
-//
-//                            for (int i = 0; i < jsonArray.length(); i++)
+//                            if (jsonArray.length()==0)
 //                            {
-//                                JSONObject jsonObject = new JSONObject(String.valueOf(jsonArray.get(i)));
-//                                Item dataObject = new Item();
-//
-//                                dataObject.setID(jsonObject.getInt("ID"));
-//                                dataObject.setCategory(jsonObject.getString("Category"));
-//                                dataObject.setProduct(jsonObject.getString("Product"));
-//                                dataObject.setDescription(jsonObject.getString("Description"));
-//                                dataObject.setImage(jsonObject.getString("Image"));
-//                                dataObject.setPrice(jsonObject.getLong("Price"));
-//
-//
-//                                items2.add(dataObject);
-////                                adapter.notifyDataSetChanged();
-//
-//                                runOnUiThread(new Runnable() {
+//                                SweetAlertDialog pDialog = new SweetAlertDialog(ProductsActivity.this, SweetAlertDialog.ERROR_TYPE).setConfirmButton("OK" , new SweetAlertDialog.OnSweetClickListener() {
 //                                    @Override
-//                                    public void run() {
-//                                        Utilss.hideSweetLoader(pDialog);
+//                                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+//
+//
 //                                    }
 //                                });
 //
+//                                pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+//                                pDialog.setTitleText("No Data Found");
+//                                pDialog.setCancelable(true);
+//                                pDialog.show();
+//                            }
+//
+//                            else
+//                            {
+//                                items.clear();
+//
+//                                for (int i = 0; i < jsonArray.length(); i++) {
+//                                    JSONObject jsonObject = new JSONObject(String.valueOf(jsonArray.get(i)));
+//                                    Item dataObject = new Item();
+//
+//                                    dataObject.setID(jsonObject.getInt("ID"));
+//                                    dataObject.setCategory(jsonObject.getString("Category"));
+//                                    dataObject.setProduct(jsonObject.getString("Product"));
+//                                    dataObject.setDescription(jsonObject.getString("Description"));
+//                                    dataObject.setImage(jsonObject.getString("Image"));
+//                                    dataObject.setPrice(jsonObject.getLong("Price"));
+//
+//
+//                                    items.add(dataObject);
+//                                    adapter3.notifyDataSetChanged();
+//
+//                                    runOnUiThread(new Runnable() {
+//                                        @Override
+//                                        public void run() {
+//                                            Utilss.hideSweetLoader(pDialog);
+//                                        }
+//                                    });
+//                                }
 //                            }
 //
 //
-//                            adapter = new SnapRecyclerAdapter(ProductsActivity.this, items2);
-//                            recyclerView.setLayoutManager(new LinearLayoutManager(ProductsActivity.this, LinearLayoutManager.HORIZONTAL, false));
-//                            recyclerView.setAdapter(adapter);
+//
 //
 //                        } catch (JSONException e) {
 //                            e.printStackTrace();
 //                        }
-//
-//
 //                    }
 //
 //
@@ -399,7 +388,108 @@ else
 //
 //        stringRequest.setRetryPolicy(new DefaultRetryPolicy(10000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 //        queue.add(stringRequest);
-//        mSwipeRefreshLayout.setRefreshing(false);
+//    }
+//
+//
+//
+//
+//
+//    private void showdatainarabicportrait()
+//    {
+//
+//        adapter4 = new SnapRecyclerAdapter4(this, items2);
+//        adapter4.setDataList(items2);
+//        recyclerView.setAdapter(adapter4);
+//
+//
+//        textView1.setText("شهي يقفز في الفم. نحن نخدم العاطفة");
+//        pDialog = Utilss.showSweetLoader(ProductsActivity.this, SweetAlertDialog.PROGRESS_TYPE, "Fetching Data...");
+//
+//        com.android.volley.RequestQueue queue = Volley.newRequestQueue(ProductsActivity.this);
+//        String url = "http://api.surveymenu.dwtdemo.com/api/ar/category/"+products_intent+"/products?pg=1";
+//        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, url,
+//                new com.android.volley.Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//
+//                        Log.d("Json-response1", response);
+//
+//                        try {
+//                            JSONArray jsonArray =new JSONArray(response);
+//
+//                            if (jsonArray.length()==0)
+//                            {
+//                                SweetAlertDialog pDialog = new SweetAlertDialog(ProductsActivity.this, SweetAlertDialog.ERROR_TYPE).setConfirmButton("OK" , new SweetAlertDialog.OnSweetClickListener() {
+//                                    @Override
+//                                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+//
+//
+//                                    }
+//                                });
+//
+//                                pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+//                                pDialog.setTitleText("No Data Found");
+//                                pDialog.setCancelable(true);
+//                                pDialog.show();
+//                            }
+//
+//                            else
+//                            {
+//                                items2.clear();
+//
+//                                for (int i = 0; i < jsonArray.length(); i++) {
+//                                    JSONObject jsonObject = new JSONObject(String.valueOf(jsonArray.get(i)));
+//                                    Item dataObject = new Item();
+//
+//                                    dataObject.setID(jsonObject.getInt("ID"));
+//                                    dataObject.setCategory(jsonObject.getString("Category"));
+//                                    dataObject.setProduct(jsonObject.getString("Product"));
+//                                    dataObject.setDescription(jsonObject.getString("Description"));
+//                                    dataObject.setImage(jsonObject.getString("Image"));
+//                                    dataObject.setPrice(jsonObject.getLong("Price"));
+//                                    items2.add(dataObject);
+//                                    adapter4.notifyDataSetChanged();
+//
+//                                    runOnUiThread(new Runnable() {
+//                                        @Override
+//                                        public void run() {
+//                                            Utilss.hideSweetLoader(pDialog);
+//                                        }
+//                                    });
+//                                }
+//                            }
+//
+//
+//
+//
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//
+//
+//                }, new com.android.volley.Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        Utilss.hideSweetLoader(pDialog);
+//                    }
+//                });
+//            }
+//        }) {
+//            @Override
+//            public Map getHeaders() {
+//                HashMap headers = new HashMap();
+//                headers.put("Authorization", "Bearer "+MainActivity.value2);
+//                return headers;
+//            }
+//        };
+//
+//        stringRequest.setRetryPolicy(new DefaultRetryPolicy(10000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+//        queue.add(stringRequest);
 //
 //    }
 
@@ -407,10 +497,213 @@ else
 
 
 
+//
+
+
+    public void onBackPressed() {
+    }
+
+
+    public void showdatainarabic()
+    {
+
+        adapter2 = new SnapRecyclerAdapter2(this, items2);
+        adapter2.setDataList(items2);
+        recyclerView.setAdapter(adapter2);
+
+
+        textView1.setText("شهي يقفز في الفم. نحن نخدم العاطفة");
+        pDialog = Utilss.showSweetLoader(ProductsActivity.this, SweetAlertDialog.PROGRESS_TYPE, "Fetching Data...");
+
+//        com.android.volley.RequestQueue queue = Volley.newRequestQueue(ProductsActivity.this);
+//        String url = "http://api.surveymenu.dwtdemo.com/api/ar/category/"+products_intent+"/products?pg=1";
+
+
+        if (products_intent==0)
+        {
+            com.android.volley.RequestQueue queue = Volley.newRequestQueue(ProductsActivity.this);
+            String url = "http://api.surveymenu.dwtdemo.com/api/ar/category/"+products_intent2+"/products?pg=1";
+            StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, url,
+                    new com.android.volley.Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+
+                            Log.d("Json-response1", response);
+
+                            try {
+                                JSONArray jsonArray =new JSONArray(response);
+
+                                if (jsonArray.length()==0)
+                                {
+                                    pDialog = new SweetAlertDialog(ProductsActivity.this, SweetAlertDialog.ERROR_TYPE).setConfirmButton("OK" , new SweetAlertDialog.OnSweetClickListener() {
+                                        @Override
+                                        public void onClick(SweetAlertDialog sweetAlertDialog) {
+
+                                            pDialog.dismiss();
+                                        }
+                                    });
+
+                                    pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+                                    pDialog.setTitleText("No Data Found");
+                                    pDialog.setCancelable(true);
+                                    pDialog.show();
+                                }
+
+                                else
+                                {
+                                    items2.clear();
+
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        JSONObject jsonObject = new JSONObject(String.valueOf(jsonArray.get(i)));
+                                        Item dataObject = new Item();
+
+                                        dataObject.setID(jsonObject.getInt("ID"));
+                                        dataObject.setCategory(jsonObject.getString("Category"));
+                                        dataObject.setProduct(jsonObject.getString("Product"));
+                                        dataObject.setDescription(jsonObject.getString("Description"));
+                                        dataObject.setImage(jsonObject.getString("Image"));
+                                        dataObject.setPrice(jsonObject.getLong("Price"));
+
+
+                                        items2.add(dataObject);
+                                        adapter2.notifyDataSetChanged();
+
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Utilss.hideSweetLoader(pDialog);
+                                            }
+                                        });
+                                    }
+                                }
 
 
 
 
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+
+                    }, new com.android.volley.Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Utilss.hideSweetLoader(pDialog);
+                        }
+                    });
+                }
+            }) {
+                @Override
+                public Map getHeaders() {
+                    HashMap headers = new HashMap();
+                    headers.put("Authorization", "Bearer "+MainActivity.value2);
+                    return headers;
+                }
+            };
+
+            stringRequest.setRetryPolicy(new DefaultRetryPolicy(10000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            queue.add(stringRequest);
+        }
+
+
+        else
+        {
+            com.android.volley.RequestQueue queue = Volley.newRequestQueue(ProductsActivity.this);
+            String url = "http://api.surveymenu.dwtdemo.com/api/ar/category/"+products_intent+"/products?pg=1";
+            StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, url,
+                    new com.android.volley.Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+
+                            Log.d("Json-response2", response);
+
+                            try {
+                                JSONArray jsonArray =new JSONArray(response);
+
+                                if (jsonArray.length()==0)
+                                {
+                                    pDialog = new SweetAlertDialog(ProductsActivity.this, SweetAlertDialog.ERROR_TYPE).setConfirmButton("OK" , new SweetAlertDialog.OnSweetClickListener() {
+                                        @Override
+                                        public void onClick(SweetAlertDialog sweetAlertDialog) {
+
+                                            pDialog.dismiss();
+                                        }
+                                    });
+
+                                    pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+                                    pDialog.setTitleText("No Data Found");
+                                    pDialog.setCancelable(true);
+                                    pDialog.show();
+                                }
+
+                                else
+                                {
+                                    items2.clear();
+
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        JSONObject jsonObject = new JSONObject(String.valueOf(jsonArray.get(i)));
+                                        Item dataObject = new Item();
+
+                                        dataObject.setID(jsonObject.getInt("ID"));
+                                        dataObject.setCategory(jsonObject.getString("Category"));
+                                        dataObject.setProduct(jsonObject.getString("Product"));
+                                        dataObject.setDescription(jsonObject.getString("Description"));
+                                        dataObject.setImage(jsonObject.getString("Image"));
+                                        dataObject.setPrice(jsonObject.getLong("Price"));
+
+
+                                        items2.add(dataObject);
+                                        adapter2.notifyDataSetChanged();
+
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Utilss.hideSweetLoader(pDialog);
+                                            }
+                                        });
+                                    }
+                                }
+
+
+
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+
+                    }, new com.android.volley.Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Utilss.hideSweetLoader(pDialog);
+                        }
+                    });
+                }
+            }) {
+                @Override
+                public Map getHeaders() {
+                    HashMap headers = new HashMap();
+                    headers.put("Authorization", "Bearer "+MainActivity.value2);
+                    return headers;
+                }
+            };
+
+            stringRequest.setRetryPolicy(new DefaultRetryPolicy(10000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            queue.add(stringRequest);
+        }
+
+
+    }
 
     public void loadallimages()
     {
@@ -422,99 +715,195 @@ else
         textView1.setText("Deliciousness jumping into the mouth. We serve passion");
         pDialog = Utilss.showSweetLoader(ProductsActivity.this, SweetAlertDialog.PROGRESS_TYPE, "Fetching Data...");
 
-        com.android.volley.RequestQueue queue = Volley.newRequestQueue(ProductsActivity.this);
-        String url = "http://api.surveymenu.dwtdemo.com/api/en/category/"+products_intent+"/products?pg=1";
-        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, url,
-                new com.android.volley.Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
 
+        if (products_intent==0)
+        {
+            com.android.volley.RequestQueue queue = Volley.newRequestQueue(ProductsActivity.this);
+            String url = "http://api.surveymenu.dwtdemo.com/api/en/category/"+products_intent2+"/products?pg=1";
+            StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, url,
+                    new com.android.volley.Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
 
+                            Log.d("Json-response1", response);
 
+                            try {
+                                JSONArray jsonArray =new JSONArray(response);
 
-
-
-
-                        Log.d("Json-response1", response);
-
-                        try {
-                            JSONArray jsonArray =new JSONArray(response);
-
-                            if (jsonArray.length()==0)
-                            {
-                                SweetAlertDialog pDialog = new SweetAlertDialog(ProductsActivity.this, SweetAlertDialog.ERROR_TYPE).setConfirmButton("OK" , new SweetAlertDialog.OnSweetClickListener() {
-                                    @Override
-                                    public void onClick(SweetAlertDialog sweetAlertDialog) {
-
-
-                                    }
-                                });
-
-                                pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
-                                pDialog.setTitleText("No Data Found");
-                                pDialog.setCancelable(true);
-                                pDialog.show();
-                            }
-
-                            else
-                            {
-                                items.clear();
-
-                                for (int i = 0; i < jsonArray.length(); i++) {
-                                    JSONObject jsonObject = new JSONObject(String.valueOf(jsonArray.get(i)));
-                                    Item dataObject = new Item();
-
-                                    dataObject.setID(jsonObject.getInt("ID"));
-                                    dataObject.setCategory(jsonObject.getString("Category"));
-                                    dataObject.setProduct(jsonObject.getString("Product"));
-                                    dataObject.setDescription(jsonObject.getString("Description"));
-                                    dataObject.setImage(jsonObject.getString("Image"));
-                                    dataObject.setPrice(jsonObject.getLong("Price"));
-
-
-                                    items.add(dataObject);
-                                    adapter.notifyDataSetChanged();
-
-                                    runOnUiThread(new Runnable() {
+                                if (jsonArray.length()==0)
+                                {
+                                    SweetAlertDialog pDialog = new SweetAlertDialog(ProductsActivity.this, SweetAlertDialog.ERROR_TYPE).setConfirmButton("OK" , new SweetAlertDialog.OnSweetClickListener() {
                                         @Override
-                                        public void run() {
-                                            Utilss.hideSweetLoader(pDialog);
+                                        public void onClick(SweetAlertDialog sweetAlertDialog) {
+
+
                                         }
                                     });
+
+                                    pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+                                    pDialog.setTitleText("No Data Found");
+                                    pDialog.setCancelable(true);
+                                    pDialog.show();
                                 }
+
+                                else
+                                {
+                                    items.clear();
+
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        JSONObject jsonObject = new JSONObject(String.valueOf(jsonArray.get(i)));
+                                        Item dataObject = new Item();
+
+                                        dataObject.setID(jsonObject.getInt("ID"));
+                                        dataObject.setCategory(jsonObject.getString("Category"));
+                                        dataObject.setProduct(jsonObject.getString("Product"));
+                                        dataObject.setDescription(jsonObject.getString("Description"));
+                                        dataObject.setImage(jsonObject.getString("Image"));
+                                        dataObject.setPrice(jsonObject.getLong("Price"));
+
+
+                                        items.add(dataObject);
+                                        adapter.notifyDataSetChanged();
+
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Utilss.hideSweetLoader(pDialog);
+                                            }
+                                        });
+                                    }
+                                }
+
+
+
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-
-
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         }
-                    }
 
 
-                }, new com.android.volley.Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+                    }, new com.android.volley.Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Utilss.hideSweetLoader(pDialog);
-                    }
-                });
-            }
-        }) {
-            @Override
-            public Map getHeaders() {
-                HashMap headers = new HashMap();
-                headers.put("Authorization", "Bearer "+MainActivity.value2);
-                return headers;
-            }
-        };
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Utilss.hideSweetLoader(pDialog);
+                        }
+                    });
+                }
+            }) {
+                @Override
+                public Map getHeaders() {
+                    HashMap headers = new HashMap();
+                    headers.put("Authorization", "Bearer "+MainActivity.value2);
+                    return headers;
+                }
+            };
 
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(10000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        queue.add(stringRequest);
+            stringRequest.setRetryPolicy(new DefaultRetryPolicy(10000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            queue.add(stringRequest);
+        }
+
+        else
+        {
+            com.android.volley.RequestQueue queue = Volley.newRequestQueue(ProductsActivity.this);
+            String url = "http://api.surveymenu.dwtdemo.com/api/en/category/"+products_intent+"/products?pg=1";
+            StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, url,
+                    new com.android.volley.Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+
+
+
+
+
+
+
+                            Log.d("Json-response1", response);
+
+                            try {
+                                JSONArray jsonArray =new JSONArray(response);
+
+                                if (jsonArray.length()==0)
+                                {
+                                    SweetAlertDialog pDialog = new SweetAlertDialog(ProductsActivity.this, SweetAlertDialog.ERROR_TYPE).setConfirmButton("OK" , new SweetAlertDialog.OnSweetClickListener() {
+                                        @Override
+                                        public void onClick(SweetAlertDialog sweetAlertDialog) {
+
+
+                                        }
+                                    });
+
+                                    pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+                                    pDialog.setTitleText("No Data Found");
+                                    pDialog.setCancelable(true);
+                                    pDialog.show();
+                                }
+
+                                else
+                                {
+                                    items.clear();
+
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        JSONObject jsonObject = new JSONObject(String.valueOf(jsonArray.get(i)));
+                                        Item dataObject = new Item();
+
+                                        dataObject.setID(jsonObject.getInt("ID"));
+                                        dataObject.setCategory(jsonObject.getString("Category"));
+                                        dataObject.setProduct(jsonObject.getString("Product"));
+                                        dataObject.setDescription(jsonObject.getString("Description"));
+                                        dataObject.setImage(jsonObject.getString("Image"));
+                                        dataObject.setPrice(jsonObject.getLong("Price"));
+
+
+                                        items.add(dataObject);
+                                        adapter.notifyDataSetChanged();
+
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Utilss.hideSweetLoader(pDialog);
+                                            }
+                                        });
+                                    }
+                                }
+
+
+
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+
+                    }, new com.android.volley.Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Utilss.hideSweetLoader(pDialog);
+                        }
+                    });
+                }
+            }) {
+                @Override
+                public Map getHeaders() {
+                    HashMap headers = new HashMap();
+                    headers.put("Authorization", "Bearer "+MainActivity.value2);
+                    return headers;
+                }
+            };
+
+            stringRequest.setRetryPolicy(new DefaultRetryPolicy(10000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            queue.add(stringRequest);
+        }
+
 
     }
 

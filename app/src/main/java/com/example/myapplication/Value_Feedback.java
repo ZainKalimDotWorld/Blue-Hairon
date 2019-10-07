@@ -1,6 +1,8 @@
 package com.example.myapplication;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,6 +12,8 @@ import com.droidnet.DroidNet;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -19,7 +23,10 @@ import android.text.method.CharacterPickerDialog;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -31,71 +38,236 @@ public class Value_Feedback extends AppCompatActivity implements DroidListener {
     ImageView imageView2;
     DroidNet mDroidNet;
 
+
+
+
+
+
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_value__feedback);
-
-
-
-        mDroidNet = DroidNet.getInstance();
-        mDroidNet.addInternetConnectivityListener(this);
-
-//        Window window = this.getWindow();
-//// clear FLAG_TRANSLUCENT_STATUS flag:
-//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
-//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//// finally change the color
-//        window.setStatusBarColor(ContextCompat.getColor(Value_Feedback.this,R.color.colorback));
-
-
-        imageView1 = (ImageView) findViewById(R.id.imageView1);
-
-
-        imageView1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent(Value_Feedback.this , Main_MenuScreen.class);
-                startActivity(intent);
-            }
-        });
 
 
 
 
+        int currentOrientation = this.getResources().getConfiguration().orientation;
 
-        imageView2 = (ImageView) findViewById(R.id.imageView2);
+        if (currentOrientation == Configuration.ORIENTATION_PORTRAIT)
+        {
+            this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+           setContentView(R.layout.activity_value__feedback);
+            imageView1 = (ImageView) findViewById(R.id.imageView1);
+
+            imageView1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Intent intent = new Intent(Value_Feedback.this , Main_MenuScreen.class);
+                    intent.putExtra("PortraitMode" , "Portrait");
+                    startActivity(intent);
+                }
+            });
+
+            imageView2 = (ImageView) findViewById(R.id.imageView2);
 
 
-        imageView2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            imageView2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
 
-                Intent intent = new Intent(Value_Feedback.this , Feedback_Menu.class);
-                startActivity(intent);
-            }
-        });
+                    Intent intent = new Intent(Value_Feedback.this , Feedback_Menu.class);
+                    startActivity(intent);
+                }
+            });
+        }
 
 
+        else
+        {
+            this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
+           setContentView(R.layout.activity_value__feedback_landscape);
+            imageView1 = (ImageView) findViewById(R.id.imageView1);
+            imageView1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Intent intent = new Intent(Value_Feedback.this , Main_MenuScreen.class);
+                    startActivity(intent);
+                }
+            });
+
+            imageView2 = (ImageView) findViewById(R.id.imageView2);
+            imageView2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Intent intent = new Intent(Value_Feedback.this , Feedback_Menu.class);
+                    startActivity(intent);
+                }
+            });
+        }
+
+
+//        int orientation = this.getResources().getConfiguration().orientation;
+//        if (orientation==Configuration.ORIENTATION_PORTRAIT)
+//        {
+//            setContentView(R.layout.activity_value__feedback);
+//
+//            imageView1 = (ImageView) findViewById(R.id.imageView1);
+//
+//            imageView1.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//
+//                    Intent intent = new Intent(Value_Feedback.this , Main_MenuScreen.class);
+//                    intent.putExtra("PortraitMode" , "Portrait");
+//                    startActivity(intent);
+//                }
+//            });
+//
+//            imageView2 = (ImageView) findViewById(R.id.imageView2);
+//
+//
+//            imageView2.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//
+//
+//                    Intent intent = new Intent(Value_Feedback.this , Feedback_Menu.class);
+//                    startActivity(intent);
+//                }
+//            });
+//        }
+//
+//        else
+//        {
+//            setContentView(R.layout.activity_value__feedback_landscape);
+//
+//            imageView1 = (ImageView) findViewById(R.id.imageView1);
+//
+//            imageView1.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//
+//                    Intent intent = new Intent(Value_Feedback.this , Main_MenuScreen.class);
+//                    intent.putExtra("LandscapeMode" , "Landscape");
+//                    startActivity(intent);
+//                }
+//            });
+//
+//            imageView2 = (ImageView) findViewById(R.id.imageView2);
+//
+//
+//            imageView2.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//
+//
+//                    Intent intent = new Intent(Value_Feedback.this , Feedback_Menu.class);
+//                    startActivity(intent);
+//                }
+//            });
+//
+//        }
+//
+//
+//        mDroidNet = DroidNet.getInstance();
+//        mDroidNet.addInternetConnectivityListener(this);
 
     }
 
-    public void onBackPressed() {
-//        Intent intent = new Intent(Product_Detail.this, ProductsActivity.class);
-//        finish();
-//        startActivity(intent);
-    }
+
+
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         mDroidNet.removeInternetConnectivityChangeListener(this);
     }
+
+//    @Override
+//    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+//        super.onConfigurationChanged(newConfig);
+////        setContentView(R.layout.activity_main);
+//
+//
+//
+//        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//
+////            Toast.makeText(this, "1", Toast.LENGTH_SHORT).show();
+//            setContentView(R.layout.activity_value__feedback_landscape);
+//
+//            imageView1 = (ImageView) findViewById(R.id.imageView1);
+//
+//            imageView1.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//
+//                    Intent intent = new Intent(Value_Feedback.this , Main_MenuScreen.class);
+//                    startActivity(intent);
+//                }
+//            });
+//
+//            imageView2 = (ImageView) findViewById(R.id.imageView2);
+//
+//
+//            imageView2.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//
+//
+//                    Intent intent = new Intent(Value_Feedback.this , Feedback_Menu.class);
+//                    startActivity(intent);
+//                }
+//            });
+//
+//
+//
+//
+//        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+////            createVerticalLayout();
+//
+//            //            Toast.makeText(this, "2288", Toast.LENGTH_SHORT).show();
+//            setContentView(R.layout.activity_value__feedback);
+//
+//            imageView1 = (ImageView) findViewById(R.id.imageView1);
+//
+//            imageView1.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//
+//                    Intent intent = new Intent(Value_Feedback.this , Main_MenuScreen.class);
+//                    startActivity(intent);
+//                }
+//            });
+//
+//            imageView2 = (ImageView) findViewById(R.id.imageView2);
+//
+//
+//            imageView2.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//
+//
+//                    Intent intent = new Intent(Value_Feedback.this , Feedback_Menu.class);
+//                    startActivity(intent);
+//                }
+//            });
+//
+//
+//
+//
+//        }
+//
+//    }
+
+
+
 
     @Override
     public void onInternetConnectivityChanged(boolean isConnected) {

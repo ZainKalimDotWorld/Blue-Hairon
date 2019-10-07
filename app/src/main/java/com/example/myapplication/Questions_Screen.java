@@ -3,6 +3,8 @@ package com.example.myapplication;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -45,71 +47,194 @@ public class Questions_Screen extends AppCompatActivity implements View.OnClickL
 int contact_intent;
 Boolean bool_value;
     String data, fbid, token, comments;
+    private ImageView imageView22, imageView23, imageView24,imageView26;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_questions__screen);
 
-        data = getIntent().getStringExtra("mylist");
+
+        int orientation = this.getResources().getConfiguration().orientation;
+
+
+
+
+        if (orientation== Configuration.ORIENTATION_PORTRAIT)
+        {
+            this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+            //portrait
+            setContentView(R.layout.activity_questions__screen);
+
+            data = getIntent().getStringExtra("mylist");
+//                bool_value = getIntent().getExtras().getBoolean("Toggle_State");
+//                Log.e("Bool_Value", ""+bool_value);
+
+            emails_intent = getIntent().getStringExtra("email");
+//            contact_intent = getIntent().getIntExtra("phone" , 0);
+
+
+
+            Log.e("My Json String", data);
+
+            Gson gson = new Gson();
+            myData = gson.fromJson(data, MyData[].class);
+            ratings = new int[myData.length + 1];
+
+            question = (TextView) findViewById(R.id.textview);
+            question.setText(myData[count].getQuestion());
+
+            imageView2 = findViewById(R.id.home_btn);
+            imageView22 = (ImageView) findViewById(R.id.imageView22);
+            imageView23 = (ImageView) findViewById(R.id.imageView24);
+            imageView24 = (ImageView) findViewById(R.id.imageView26);
+            imageView26 = (ImageView) findViewById(R.id.imageView27);
+
+
+            if (Feedback_Menu.swToggle.isOn())
+            {
+                imageView2.setText("الصفحة الرئيسية");
+                imageView22.setImageResource(R.mipmap.very_gud_arabic);
+                imageView23.setImageResource(R.mipmap.gud_arabic);
+                imageView24.setImageResource(R.mipmap.fair_arabic);
+                imageView26.setImageResource(R.mipmap.poor_arabic);
+            }
+
+            else
+            {
+                imageView2.setText("HOME");
+
+                imageView22.setImageResource(R.mipmap.very_gud);
+                imageView23.setImageResource(R.mipmap.gud);
+                imageView24.setImageResource(R.mipmap.fair_btn);
+                imageView26.setImageResource(R.mipmap.poor_btn);
+            }
+
+
+            imageView2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Intent intent =new Intent(Questions_Screen.this , Value_Feedback.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+
+
+
+
+
+
+            rate1 = (ImageView) findViewById(R.id.imageView1);
+            rate2 = (ImageView) findViewById(R.id.imageView25);
+            rate3 = (ImageView) findViewById(R.id.imageView3);
+            rate4 = (ImageView) findViewById(R.id.imageView4);
+
+//        sendBtn = (Button) findViewById(R.id.send_comment);
+//
+//        mComments = findViewById(R.id.my_comments);
+
+            rate1.setOnClickListener(this);
+            rate2.setOnClickListener(this);
+            rate3.setOnClickListener(this);
+            rate4.setOnClickListener(this);
+//        rate5.setOnClickListener(this);
+
+        }
+
+
+
+
+
+        else
+        {
+            this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            setContentView(R.layout.activity_questions__screen_porttrait);
+
+
+            data = getIntent().getStringExtra("mylist");
 
 
 
 //                bool_value = getIntent().getExtras().getBoolean("Toggle_State");
 //                Log.e("Bool_Value", ""+bool_value);
 
-        emails_intent = getIntent().getStringExtra("email");
-        contact_intent = getIntent().getIntExtra("phone" , 0);
+            emails_intent = getIntent().getStringExtra("email");
+//            contact_intent = getIntent().getIntExtra("phone" , 0);
 
 
 
-        Log.e("My Json String", data);
+            Log.e("My Json String", data);
 
-        Gson gson = new Gson();
-        myData = gson.fromJson(data, MyData[].class);
-        ratings = new int[myData.length + 1];
+            Gson gson = new Gson();
+            myData = gson.fromJson(data, MyData[].class);
+            ratings = new int[myData.length + 1];
 
-        question = (TextView) findViewById(R.id.textview);
-        question.setText(myData[count].getQuestion());
+            question = (TextView) findViewById(R.id.textview);
+            question.setText(myData[count].getQuestion());
 
-        imageView2 = findViewById(R.id.home_btn);
-
-
-        if (Feedback_Menu.swToggle.isOn())
-        {
-            imageView2.setText("الصفحة الرئيسية");
-        }
-
-        else
-        {
-            imageView2.setText("HOME");
-        }
+            imageView2 = findViewById(R.id.home_btn);
+            imageView22 = (ImageView) findViewById(R.id.imageView22);
+            imageView23 = (ImageView) findViewById(R.id.imageView24);
+            imageView24 = (ImageView) findViewById(R.id.imageView26);
+            imageView26 = (ImageView) findViewById(R.id.imageView28);
 
 
-        imageView2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            if (Feedback_Menu.swToggle.isOn())
+            {
+                imageView2.setText("الصفحة الرئيسية");
 
-                Intent intent =new Intent(Questions_Screen.this , Value_Feedback.class);
-                startActivity(intent);
-                finish();
+                imageView22.setImageResource(R.mipmap.very_gud_arabic);
+                imageView23.setImageResource(R.mipmap.gud_arabic);
+                imageView24.setImageResource(R.mipmap.fair_arabic);
+                imageView26.setImageResource(R.mipmap.poor_arabic);
             }
-        });
 
-        rate1 = (ImageView) findViewById(R.id.imageView1);
-        rate2 = (ImageView) findViewById(R.id.imageView25);
-        rate3 = (ImageView) findViewById(R.id.imageView3);
-        rate4 = (ImageView) findViewById(R.id.imageView4);
+            else
+            {
+                imageView2.setText("HOME");
+
+                imageView22.setImageResource(R.mipmap.very_gud);
+                imageView23.setImageResource(R.mipmap.gud);
+                imageView24.setImageResource(R.mipmap.fair_btn);
+                imageView26.setImageResource(R.mipmap.poor_btn);
+            }
+
+
+            imageView2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Intent intent =new Intent(Questions_Screen.this , Value_Feedback.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+
+
+
+
+
+
+            rate1 = (ImageView) findViewById(R.id.imageView1);
+            rate2 = (ImageView) findViewById(R.id.imageView25);
+            rate3 = (ImageView) findViewById(R.id.imageView3);
+            rate4 = (ImageView) findViewById(R.id.imageView4);
 
 //        sendBtn = (Button) findViewById(R.id.send_comment);
 //
 //        mComments = findViewById(R.id.my_comments);
 
-        rate1.setOnClickListener(this);
-        rate2.setOnClickListener(this);
-        rate3.setOnClickListener(this);
-        rate4.setOnClickListener(this);
+            rate1.setOnClickListener(this);
+            rate2.setOnClickListener(this);
+            rate3.setOnClickListener(this);
+            rate4.setOnClickListener(this);
 //        rate5.setOnClickListener(this);
+        }
+
+
+
 
 
     }
@@ -129,7 +254,7 @@ Boolean bool_value;
 
 
             intent.putExtra("Email_Value", emails_intent);
-            intent.putExtra("Contact_Value", contact_intent);
+            intent.putExtra("Contact_Value", 0);
 
             intent.putExtra("Again_Bool_Value", bool_value);
 

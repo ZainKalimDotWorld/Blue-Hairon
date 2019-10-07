@@ -37,7 +37,7 @@
         app:colorBorder="#2a3895"
         app:textOn="EN"
         app:textOff="AR"
-        android:layout_marginLeft="1105dp" />
+        android:layout_marginLeft="605dp" />
 
 
 
@@ -46,7 +46,7 @@
         android:layout_width="90dp"
         android:layout_height="40dp"
         android:layout_marginBottom="30dp"
-        android:layout_marginLeft="1000dp"
+        android:layout_marginLeft="500dp"
         android:layout_marginTop="15dp"
         android:background="@drawable/cust_border_black_radius_10_withborder"
         android:fontFamily="@font/arial"
@@ -58,7 +58,7 @@
 
     <RelativeLayout
         android:layout_width="wrap_content"
-       android:layout_marginTop="100dp"
+       android:layout_marginTop="170dp"
         android:id="@+id/layout"
         android:layout_height="wrap_content">
 
@@ -75,18 +75,19 @@
             android:textStyle="bold" />
 
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview"
-        android:layout_below="@id/textView123"
-        android:layout_width="match_parent"
-        android:paddingRight="70dp"
-        android:layout_marginTop="20dp"
-        android:scrollbars="none"
-        android:paddingLeft="70dp"
-        android:layout_height="wrap_content"
-        android:clipToPadding="false"
-        android:paddingEnd="70dp" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview"
+            android:layout_below="@id/textView123"
+            android:layout_width="match_parent"
+            android:paddingRight="70dp"
+            android:layout_marginTop="20dp"
+            android:scrollbars="none"
+            android:numColumns="auto_fit"
+            android:paddingLeft="70dp"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:paddingEnd="70dp" />
 
 </RelativeLayout>
 
