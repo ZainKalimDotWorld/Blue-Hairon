@@ -2,12 +2,16 @@ package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Display;
+import android.view.Surface;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -23,10 +27,10 @@ public class ThankuActivity extends AppCompatActivity {
 
 
 
-        int currentOrientation = this.getResources().getConfiguration().orientation;
-
-        if (currentOrientation == Configuration.ORIENTATION_PORTRAIT) {
+        if (MainActivity.orientation==Configuration.ORIENTATION_PORTRAIT)
+        {
             this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            lockActivityOrientation(ThankuActivity.this);
 
 
             setContentView(R.layout.activity_thanku);
@@ -58,6 +62,7 @@ public class ThankuActivity extends AppCompatActivity {
         else
         {
             this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            lockActivityOrientation(ThankuActivity.this);
 
             setContentView(R.layout.activity_thankus);
 
@@ -96,6 +101,43 @@ public class ThankuActivity extends AppCompatActivity {
 
 
 
+    }
+
+
+    public static void lockActivityOrientation(Activity activity) {
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        int rotation = display.getRotation();
+        int height;
+        int width;
+        Point size = new Point();
+        display.getSize(size);
+        height = size.y;
+        width = size.x;
+        switch (rotation) {
+            case Surface.ROTATION_90:
+                if (width > height)
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                else
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+                break;
+            case Surface.ROTATION_180:
+                if (height > width)
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+                else
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+                break;
+            case Surface.ROTATION_270:
+                if (width > height)
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+                else
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                break;
+            default:
+                if (height > width)
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                else
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
     }
 
     public void onBackPressed() {

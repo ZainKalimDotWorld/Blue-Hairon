@@ -5,17 +5,21 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.Surface;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -66,13 +70,10 @@ public class Feedback_Menu extends AppCompatActivity {
 
 
 
-
-        int currentOrientation = this.getResources().getConfiguration().orientation;
-
-        if (currentOrientation == Configuration.ORIENTATION_PORTRAIT)
+        if (MainActivity.orientation==Configuration.ORIENTATION_PORTRAIT)
         {
             this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
+            lockActivityOrientation(Feedback_Menu.this);
 
             setContentView(R.layout.activity_feedback__menu);
 
@@ -89,39 +90,6 @@ public class Feedback_Menu extends AppCompatActivity {
             textView= findViewById(R.id.textView);
 
             swToggle = findViewById(R.id.iv_toggle);
-
-
-
-//            if(savedInstanceState!=null)
-//            {
-//                user_Name = savedInstanceState.getString("userName");
-//                pass = savedInstanceState.getString("password");
-//
-//                toggle_state = savedInstanceState.getBoolean("toggle_state");
-//                swToggle.setOn(toggle_state);
-//
-//                if (toggle_state)
-//                {
-//                    showdatainarabic();
-//                }
-//                else
-//                {
-//                    showdatainenglish();
-//                }
-//
-//
-//            }
-//
-//            if (customer_info!=null && customer_info2!=null)
-//            {
-//                customer_info.setText(user_Name);
-//                customer_info2.setText(pass);
-//            }
-
-
-
-//        customer_info.setHint("Email Address");
-//        customer_info2.setHint("Contact Number");
 
             swToggle.setOnToggledListener(new OnToggledListener() {
                 @Override
@@ -201,32 +169,21 @@ public class Feedback_Menu extends AppCompatActivity {
 
                     else
                     {
-//                    SweetAlertDialog pDialog = new SweetAlertDialog(Feedback_Menu.this, SweetAlertDialog.ERROR_TYPE);
-//                    pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
-//                    pDialog.setTitleText("Enter Correct Email Format..!!");
-//                    pDialog.setCancelable(true);
-//                    pDialog.show();
-//                    return;
+
                     }
                 }
             });
-
-
-
         }
-
 
         else
         {
 
             this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            lockActivityOrientation(Feedback_Menu.this);
             setContentView(R.layout.activity_feedback__menu_porttrait);
 
             customer_info = findViewById(R.id.customer_info);
             customer_info2 = findViewById(R.id.customer_info2);
-
-//        customer_info.setHint("Email Address");
-//        customer_info2.setHint("Contact Number");
 
             home=findViewById(R.id.home);
             next=findViewById(R.id.next);
@@ -235,39 +192,6 @@ public class Feedback_Menu extends AppCompatActivity {
             textView= findViewById(R.id.textView);
 
             swToggle = findViewById(R.id.iv_toggle);
-
-
-//            if(savedInstanceState!=null)
-//            {
-//                user_Name = savedInstanceState.getString("userName");
-//                pass = savedInstanceState.getString("password");
-//
-//                toggle_state = savedInstanceState.getBoolean("toggle_state");
-//                swToggle.setOn(toggle_state);
-//
-//                if (toggle_state)
-//                {
-//                    showdatainarabic();
-//                }
-//                else
-//                {
-//                    showdatainenglish();
-//                }
-//
-//
-//            }
-//
-//            if (customer_info!=null && customer_info2!=null)
-//            {
-//                customer_info.setText(user_Name);
-//                customer_info2.setText(pass);
-//            }
-
-
-
-
-//        customer_info.setHint("Email Address");
-//        customer_info2.setHint("Contact Number");
 
             swToggle.setOnToggledListener(new OnToggledListener() {
                 @Override
@@ -483,9 +407,48 @@ public class Feedback_Menu extends AppCompatActivity {
 //        Log.d("MyValuesss" , "Imhere" + "" +  swToggle.isOn());
 //    }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+//        setContentView(R.layout.activity_main__menu_screens2);
+        super.onConfigurationChanged(newConfig);
+    }
 
 
-
+    public static void lockActivityOrientation(Activity activity) {
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        int rotation = display.getRotation();
+        int height;
+        int width;
+        Point size = new Point();
+        display.getSize(size);
+        height = size.y;
+        width = size.x;
+        switch (rotation) {
+            case Surface.ROTATION_90:
+                if (width > height)
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                else
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+                break;
+            case Surface.ROTATION_180:
+                if (height > width)
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+                else
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+                break;
+            case Surface.ROTATION_270:
+                if (width > height)
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+                else
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                break;
+            default :
+                if (height > width)
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                else
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
+    }
 
 
     private void loadServeyinenglish()

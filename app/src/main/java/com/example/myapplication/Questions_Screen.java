@@ -2,11 +2,15 @@ package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
+import android.view.Surface;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -54,14 +58,12 @@ Boolean bool_value;
         super.onCreate(savedInstanceState);
 
 
-        int orientation = this.getResources().getConfiguration().orientation;
 
-
-
-
-        if (orientation== Configuration.ORIENTATION_PORTRAIT)
+        if (MainActivity.orientation==Configuration.ORIENTATION_PORTRAIT)
         {
             this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            lockActivityOrientation(Questions_Screen.this);
+
 
             //portrait
             setContentView(R.layout.activity_questions__screen);
@@ -143,15 +145,12 @@ Boolean bool_value;
 
         }
 
-
-
-
-
         else
         {
             this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-            setContentView(R.layout.activity_questions__screen_porttrait);
+            lockActivityOrientation(Questions_Screen.this);
 
+            setContentView(R.layout.activity_questions__screen_porttrait);
 
             data = getIntent().getStringExtra("mylist");
 
@@ -266,6 +265,46 @@ Boolean bool_value;
 
 
     }
+
+
+    public static void lockActivityOrientation(Activity activity) {
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        int rotation = display.getRotation();
+        int height;
+        int width;
+        Point size = new Point();
+        display.getSize(size);
+        height = size.y;
+        width = size.x;
+        switch (rotation) {
+            case Surface.ROTATION_90:
+                if (width > height)
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                else
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+                break;
+            case Surface.ROTATION_180:
+                if (height > width)
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+                else
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+                break;
+            case Surface.ROTATION_270:
+                if (width > height)
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+                else
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                break;
+            default:
+                if (height > width)
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                else
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
+    }
+
+
+
 
     @Override
     public void onClick(View v) {

@@ -3,14 +3,18 @@ package com.example.myapplication;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.Surface;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -63,12 +67,12 @@ Boolean toggle_state;
         super.onCreate(savedInstanceState);
 
 
-        int orientation = this.getResources().getConfiguration().orientation;
 
-
-        if (orientation== Configuration.ORIENTATION_PORTRAIT)
+        if (MainActivity.orientation==Configuration.ORIENTATION_PORTRAIT)
         {
             this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            lockActivityOrientation(Feedback_Submit.this);
+
 
             //portrait
             setContentView(R.layout.activity_feedback__submit_portrait);
@@ -88,86 +92,6 @@ Boolean toggle_state;
             myData = gson.fromJson(go, MyData[].class);
 //        ratings = new int[myData.length];
             Log.d("Array22", "" + ratings);
-
-
-
-//            if(savedInstanceState!=null)
-//            {
-//                user_Name = savedInstanceState.getString("userName");
-//
-//                if (customer_info!=null)
-//                {
-//                    customer_info.setText(user_Name);
-//                }
-
-
-//                toggle_state = savedInstanceState.getBoolean("toggle_state");
-////                swToggle.setOn(toggle_state);
-//                if (toggle_state)
-//                {
-//                    setContentView(R.layout.activity_feedback_submit_arabic);
-//
-//                    customer_info = findViewById(R.id.customer_info);
-//                    signin2 = findViewById(R.id.signin2);
-//                    home_btn = findViewById(R.id.home_btn);
-//
-//
-//                    home_btn.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//
-//                            Intent intent = new Intent(Feedback_Submit.this, Value_Feedback.class);
-//                            startActivity(intent);
-//                            finish();
-//
-//                        }
-//                    });
-//
-//                    signin2.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//
-//                            ki2 = customer_info.getText().toString();
-//                            submitResults2(ratings, ki2);
-//                        }
-//                    });
-//                }
-//
-//                else
-//                {
-//                    setContentView(R.layout.activity_feedback__submit_portraits);
-//                    customer_info = findViewById(R.id.customer_info);
-//                    signin2 = findViewById(R.id.signin2);
-//                    home_btn = findViewById(R.id.home_btn);
-//
-//
-//                    home_btn.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//
-//                            Intent intent = new Intent(Feedback_Submit.this, Value_Feedback.class);
-//                            startActivity(intent);
-//                            finish();
-//
-//                        }
-//                    });
-//
-//                    signin2.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//
-//                            ki2 = customer_info.getText().toString();
-//                            submitResults2(ratings, ki2);
-//                        }
-//                    });
-//                }
-//
-//
-//            }
-
-
-
-
 
             if (swToggle.isOn())
             {
@@ -227,19 +151,16 @@ Boolean toggle_state;
                     }
                 });
             }
-            }
+        }
 
+        else
+        {
 
-//        bool_value = getIntent().getExtras().getBoolean("Toggle_State");
-//        Log.e("Bool_Value2", ""+bool_value);
-
-
-
-else if (orientation == Configuration.ORIENTATION_LANDSCAPE)
-{
     //landscape
     this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-    setContentView(R.layout.activity_feedback__submit);
+            lockActivityOrientation(Feedback_Submit.this);
+
+            setContentView(R.layout.activity_feedback__submit);
 
     textview = findViewById(R.id.textview);
 
@@ -411,6 +332,46 @@ else if (orientation == Configuration.ORIENTATION_LANDSCAPE)
 //            }
 //        });
     }
+
+
+
+
+    public static void lockActivityOrientation(Activity activity) {
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        int rotation = display.getRotation();
+        int height;
+        int width;
+        Point size = new Point();
+        display.getSize(size);
+        height = size.y;
+        width = size.x;
+        switch (rotation) {
+            case Surface.ROTATION_90:
+                if (width > height)
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                else
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+                break;
+            case Surface.ROTATION_180:
+                if (height > width)
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+                else
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+                break;
+            case Surface.ROTATION_270:
+                if (width > height)
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+                else
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                break;
+            default:
+                if (height > width)
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                else
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
+    }
+
 
 
 //    @Override

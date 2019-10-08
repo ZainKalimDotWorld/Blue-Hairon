@@ -1,12 +1,16 @@
 package com.example.myapplication;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
+import android.view.Surface;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -83,13 +87,13 @@ public class ProductsActivity extends BaseActivity implements DroidListener {
 
 
 
-
-        int currentOrientation = this.getResources().getConfiguration().orientation;
-
-        if (currentOrientation == Configuration.ORIENTATION_PORTRAIT) {
+        if (MainActivity.orientation==Configuration.ORIENTATION_PORTRAIT)
+        {
             this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
             setContentView(R.layout.activity_products);
+            lockActivityOrientation(ProductsActivity.this);
+
 
             mDroidNet = DroidNet.getInstance();
             mDroidNet.addInternetConnectivityListener(this);
@@ -130,11 +134,24 @@ public class ProductsActivity extends BaseActivity implements DroidListener {
             });
 
 
-            SnapHelper snapHelper = new GravitySnapHelper(Gravity.START);
-            snapHelper.attachToRecyclerView(recyclerView);
+//            SnapHelper snapHelper = new GravitySnapHelper(Gravity.START);
+//            snapHelper.attachToRecyclerView(recyclerView);
+//
+//            recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+//            recyclerView.setHasFixedSize(true);
+
+            GridLayoutManager mGridLayoutManager = new GridLayoutManager(ProductsActivity.this, 2);
+            int spanCount = 2; // 3 columns
+            int spacing = 0; // 50px
+            boolean includeEdge = true;
+            recyclerView.addItemDecoration(new ItemOffsetDecoration(spanCount, spacing, includeEdge));
+            recyclerView.setLayoutManager(mGridLayoutManager);
+//        recyclerView.setHasFixedSize(true);
 
             recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
             recyclerView.setHasFixedSize(true);
+
+
 
             swToggle.setOnToggledListener(new OnToggledListener() {
                 @Override
@@ -151,13 +168,12 @@ public class ProductsActivity extends BaseActivity implements DroidListener {
 
             });
 
-
-
         }
 
         else
         {
             this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            lockActivityOrientation(ProductsActivity.this);
 
             setContentView(R.layout.activity_products_landscape);
 
@@ -203,11 +219,18 @@ public class ProductsActivity extends BaseActivity implements DroidListener {
             });
 
 
-            SnapHelper snapHelper = new GravitySnapHelper(Gravity.START);
-            snapHelper.attachToRecyclerView(recyclerView);
+
+            GridLayoutManager mGridLayoutManager = new GridLayoutManager(ProductsActivity.this, 2);
+            int spanCount = 2; // 3 columns
+            int spacing = 0; // 50px
+            boolean includeEdge = true;
+            recyclerView.addItemDecoration(new ItemOffsetDecoration(spanCount, spacing, includeEdge));
+            recyclerView.setLayoutManager(mGridLayoutManager);
+//        recyclerView.setHasFixedSize(true);
 
             recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
             recyclerView.setHasFixedSize(true);
+
 
             swToggle.setOnToggledListener(new OnToggledListener() {
                 @Override
@@ -249,7 +272,41 @@ public class ProductsActivity extends BaseActivity implements DroidListener {
 
     }
 
-
+    public static void lockActivityOrientation(Activity activity) {
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        int rotation = display.getRotation();
+        int height;
+        int width;
+        Point size = new Point();
+        display.getSize(size);
+        height = size.y;
+        width = size.x;
+        switch (rotation) {
+            case Surface.ROTATION_90:
+                if (width > height)
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                else
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+                break;
+            case Surface.ROTATION_180:
+                if (height > width)
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+                else
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+                break;
+            case Surface.ROTATION_270:
+                if (width > height)
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+                else
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                break;
+            default:
+                if (height > width)
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                else
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
+    }
 
 
     @Override

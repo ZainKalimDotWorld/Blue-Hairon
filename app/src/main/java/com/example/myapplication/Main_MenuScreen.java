@@ -9,13 +9,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Display;
+import android.view.Surface;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -91,14 +95,10 @@ public class Main_MenuScreen extends BaseActivity implements DroidListener {
 
 
 
-
-
-
-        int currentOrientation = this.getResources().getConfiguration().orientation;
-
-        if (currentOrientation == Configuration.ORIENTATION_PORTRAIT)
+        if (MainActivity.orientation==Configuration.ORIENTATION_PORTRAIT)
         {
             this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            lockActivityOrientation(Main_MenuScreen.this);
 
             setContentView(R.layout.activity_main__menu_screen);
 
@@ -182,23 +182,18 @@ public class Main_MenuScreen extends BaseActivity implements DroidListener {
                     } else {
 
                         retreiveCategoriesinenglishportrait();
-//                        retreiveCategoriesinenglishlandscape();
                     }
                 }
 
             });
-
-
-
         }
 
-
-        else
+else
         {
             this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
             //landscape
-            setContentView(R.layout.activity_main__menu_screens2);
+            setContentView(R.layout.activity_main__menu_screen_landscape);
 
             mDroidNet = DroidNet.getInstance();
             mDroidNet.addInternetConnectivityListener(this);
@@ -287,8 +282,60 @@ public class Main_MenuScreen extends BaseActivity implements DroidListener {
 
             });
         }
+
+//        int currentOrientation = this.getResources().getConfiguration().orientation;
+//
+//        if (currentOrientation == Configuration.ORIENTATION_PORTRAIT)
+//        {
+//
+//
+//
+//
+//        }
+//
+//
+//        else
+//        {
+//
+//        }
     }
 
+
+    public static void lockActivityOrientation(Activity activity) {
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        int rotation = display.getRotation();
+        int height;
+        int width;
+        Point size = new Point();
+        display.getSize(size);
+        height = size.y;
+        width = size.x;
+        switch (rotation) {
+            case Surface.ROTATION_90:
+                if (width > height)
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                else
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+                break;
+            case Surface.ROTATION_180:
+                if (height > width)
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+                else
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+                break;
+            case Surface.ROTATION_270:
+                if (width > height)
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+                else
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                break;
+            default:
+                if (height > width)
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                else
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
+    }
 
 
     @Override

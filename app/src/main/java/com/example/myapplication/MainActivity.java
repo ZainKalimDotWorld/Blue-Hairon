@@ -88,20 +88,22 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private DroidNet mDroidNet;
     Button signin;
     int v11;
+    static  String Portrait = "portrait";
+    static  String Landscape = "landscape";
+
+   static int orientation;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+         orientation = this.getResources().getConfiguration().orientation;
 
-
-        int orientation = this.getResources().getConfiguration().orientation;
 
 
 if (orientation == Configuration.ORIENTATION_LANDSCAPE)
 {
-
     //landscape
     setContentView(R.layout.activity_main_portrait);
 
@@ -111,7 +113,6 @@ if (orientation == Configuration.ORIENTATION_LANDSCAPE)
 
     client = new OkHttpClient.Builder().connectTimeout(10, TimeUnit.SECONDS).writeTimeout(10, TimeUnit.SECONDS).readTimeout(10, TimeUnit.SECONDS).build();
     lstAnime = new ArrayList<>();
-
 
     spLeaveSubject2 = (Spinner) findViewById(R.id.spLeaveSubject2);
     customer_info = (EditText) findViewById(R.id.customer_info);
@@ -142,10 +143,7 @@ if (orientation == Configuration.ORIENTATION_LANDSCAPE)
                 @Override
                 public void onClick(View v) {
 
-//                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-//                    setContentView(R.layout.activity_main_portrait);
                     ad.dismiss();
-//                    Toast.makeText(MainActivity.this, "Landscape1", Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -156,7 +154,6 @@ if (orientation == Configuration.ORIENTATION_LANDSCAPE)
 
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                     setContentView(R.layout.activity_main);
-//                    Toast.makeText(MainActivity.this, "Portrait1", Toast.LENGTH_SHORT).show();
                     ad.dismiss();
                 }
             });
@@ -202,7 +199,6 @@ else
     spLeaveSubject2.setOnItemSelectedListener(MainActivity.this);
 
     signin = (Button) findViewById(R.id.signin);
-
     imageView4 = (ImageView) findViewById(R.id.imageView4);
 
 
@@ -257,7 +253,7 @@ else
         public void onClick(View v) {
 
 
-            loginapi_landscape();
+            loginapiportrait();
         }
     });
 
@@ -539,10 +535,9 @@ else
                                 Log.d("Valuesss" , value2);
 
                                 Intent intent = new Intent(MainActivity.this, Value_Feedback.class);
+                                intent.putExtra("Portrait_mode" , "portrait");
 //                            intent.putExtra("Access_Token", value2);
                                 startActivity(intent);
-
-
 
 
 

@@ -20,11 +20,10 @@
 
     <ImageView
         android:id="@+id/imageView4"
-        android:layout_width="wrap_content"
+        android:layout_width="80dp"
         android:src="@mipmap/photo"
-        android:background="@null"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="800dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="1150dp"
         android:layout_marginTop="50dp"
         />
 

@@ -108,9 +108,8 @@ public class Product_Detail extends BaseActivity implements DroidListener {
 //        setContentView(R.layout.activity_product__detail);
 
 
-        int currentOrientation = this.getResources().getConfiguration().orientation;
 
-        if (currentOrientation == Configuration.ORIENTATION_PORTRAIT)
+        if (MainActivity.orientation==Configuration.ORIENTATION_PORTRAIT)
         {
             this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -247,7 +246,10 @@ public class Product_Detail extends BaseActivity implements DroidListener {
                     viewPager.setCurrentItem(viewPager.getCurrentItem()+1 , true);
                 }
             });
+
         }
+
+
 
 
 
